@@ -55,7 +55,7 @@
                   <td>{{$index + 1}}</td>
 
                   <td>
-                    <ui-select multiple tagging="" ng-model="row.name" theme="bootstrap"  style="width: 300px;" title="Choose a person">
+                    <ui-select multiple tagging="tagTransform" ng-model="item.name" theme="bootstrap"  style="width: 300px;" title="Choose a person">
                       <ui-select-match placeholder="Name">{{$item.name}}</ui-select-match>
                       <ui-select-choices repeat="prod in products">
                         <div  ng-bind-html="(prod.name | highlight: $select.search) +' (new)'"></div>
@@ -80,17 +80,10 @@
               </tbody>
             </table>
           </div>
-          <div class="tableData " ng-show="totalItems===0 ">
-            <h5>No data found</h5>
-          </div>
-          <div class="tableData " ng-show="totalItems===undefined ">
-            <h5>Loading Data</h5>
-          </div>
-          <ul ng-if="totalItems" ng-change="viewTable()" uib-pagination total-items="totalItems" items-per-page="maxRow" ng-model="formData.page"
-            max-size="template.pageMax" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+          <div class="tableData ">
             <input type="button" class="btn btn-success pull-right" ng-click="addRow()" value="Add">
-              
-        </input>
+          </input>
+          </div>  
         </div>
       </div>
     </div>

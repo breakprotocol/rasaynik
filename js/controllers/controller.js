@@ -78,6 +78,16 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
           }
           $scope.row.push(obj);
         }
+
+        $scope.tagTransform = function (newTag) {
+            var item = {
+                name: newTag,
+                "qnty":"",
+                "qlty":"",
+                "price":""
+            };
+            return item;
+          };
         $scope.addRow();
       
         $scope.removeRow=function(index){

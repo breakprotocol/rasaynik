@@ -11468,6 +11468,7 @@ acronym {
 .table-responsive {
     float: left;
     width: 100%;
+    overflow:inherit;
 }
 
 .scroll-box {
