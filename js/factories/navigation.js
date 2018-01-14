@@ -11,6 +11,11 @@ myApp.factory('NavigationService', function ($http) {
             classis: "activeColor",
             sref: "#/category",
             icon: "phone"
+        },{
+            name: "Purchase Order(PO)",
+            classis: "activeColor",
+            sref: "#/purchaseorder",
+            icon: "phone"
         }
     ];
 

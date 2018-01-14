@@ -36,6 +36,13 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             templateUrl: "views/template.html",
             controller: 'CategoryCtrl'
         })
+
+         //purchaase order
+         .state('purchase-order', {
+            url: "/purchaseorder",
+            templateUrl: "views/template.html",
+            controller: 'PurchaseOrderCtrl'
+        })
       
       
         //sports

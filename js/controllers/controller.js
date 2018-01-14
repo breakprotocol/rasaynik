@@ -93,4 +93,51 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.removeRow=function(index){
           $scope.row.splice(index,1);
         }
+      })
+
+      .controller('PurchaseOrderCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("purchaseorder");
+        $scope.menutitle = NavigationService.makeactive("Purchase Order(PO)");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+      
+        $scope.formData = {};
+        $scope.formData.page = 1;
+        $scope.formData.type = '';
+        $scope.formData.keyword = '';
+      
+        // credentials--0 for PO Department
+        // credentials--1 for admin 
+        // change and see the dii=fference
+        $.jStorage.set("profile",{'credentials':0});
+        $scope.profile = $.jStorage.get("profile");
+        
+        $scope.products =[{
+            "name":"A"
+          },{
+            "name":"B"
+          },{
+            "name":"C"
+          },{
+            "name":"D"
+          }];
+        
+          $scope.row=[];
+          $scope.addRow=function(){
+            var obj = {
+              "name":"A",
+              "qnty":12,
+              "qlty":22,
+              "price":200,
+              "status":0
+
+            }
+            $scope.row.push(obj);
+          }
+          $scope.addRow();
+
+
+        
+       
       });
