@@ -24,8 +24,8 @@ switch($service)
 	product_request($method,$mysqli,$data);
 	break;
 
-	case "products":
-	product($method,$mysqli,$data);
+	case "raw_materials":
+	raw_materials($method,$mysqli,$data);
 	break;
 
 	case "upload":
@@ -228,6 +228,19 @@ function product_request($method,$mysqli,$data)
 
 		echo $result;
 	}
+
+}
+function raw_materials($method,$mysqli,$data)
+{
+		$data = json_decode($data, true);
+	
+		if ($method=="getAll")
+		{
+		$query="select * from raw_materials";
+		$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
+		$json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+		echo json_encode($json );
+		}
 
 }
 

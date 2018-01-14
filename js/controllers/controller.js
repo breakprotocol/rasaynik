@@ -50,6 +50,10 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.menutitle = NavigationService.makeactive("Category");
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
+        $scope.raw_materials = NavigationService.getAllRaw_materials('/raw_materials/getAll',$scope.data,
+            function(data){
+                console.log(data)
+            });
       
         $scope.formData = {};
         $scope.formData.page = 1;
@@ -110,7 +114,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // credentials--0 for PO Department
         // credentials--1 for admin 
         // change and see the dii=fference
-        $.jStorage.set("profile",{'credentials':0});
+        $.jStorage.set("profile",{'credentials':1});
         $scope.profile = $.jStorage.get("profile");
         
         $scope.products =[{

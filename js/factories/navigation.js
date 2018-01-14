@@ -67,6 +67,16 @@ myApp.factory('NavigationService', function ($http) {
                 url: adminurl + url,
                 data: data
             }).then(function (data) {
+                console.log(data.data);
+            });
+        },
+
+        getAllRaw_materials: function (url, data, callback) {
+            $http({
+                method: "POST",
+                url: adminurl + url,
+                data: data
+            }).then(function (data) {
                 callback(data.data);
             });
         }
