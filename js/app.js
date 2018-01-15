@@ -32,7 +32,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
 
         //category
         .state('category', {
-            url: "/category",
+            url: "/category/:id",
             templateUrl: "views/template.html",
             controller: 'CategoryCtrl'
         })

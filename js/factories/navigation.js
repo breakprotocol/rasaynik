@@ -7,11 +7,6 @@ var uploadurl = imgurl;
 
 myApp.factory('NavigationService', function ($http) {
     var navigation = [{
-            name: "Category",
-            classis: "activeColor",
-            sref: "#/category",
-            icon: "phone"
-        },{
             name: "Purchase Order(PO)",
             classis: "activeColor",
             sref: "#/purchaseorder",
@@ -72,6 +67,38 @@ myApp.factory('NavigationService', function ($http) {
         },
 
         getAllRaw_materials: function (url, data, callback) {
+            $http({
+                method: "POST",
+                url: adminurl + url,
+                data: data
+            }).then(function (data) {
+                callback(data.data);
+            });
+        },
+
+        savePO: function(url,data,callback){
+            $http({
+                method: "POST",
+                url: adminurl + url,
+                data: data
+            }).then(function (data) {
+                callback(data.data);
+            });
+        },
+
+        getAllPO: function(url,callback){
+            $http({
+                method: "POST",
+                url: adminurl + url,
+                data:{
+                    "page":1
+                }
+            }).then(function (data) {
+                callback(data.data);
+            });
+        },
+
+        getOne:function(url,data,callback){
             $http({
                 method: "POST",
                 url: adminurl + url,
