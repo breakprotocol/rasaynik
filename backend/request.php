@@ -16,8 +16,8 @@ $data = file_get_contents('php://input');
 
 switch($service)
 {
-	case "po_request":
-	po_request($method,$mysqli,$data);
+	case "purchase_request":
+	purchase_request($method,$mysqli,$data);
 	break;
 
 	case "product_request":
@@ -38,7 +38,7 @@ switch($service)
 }
 
 
-function po_request($method,$mysqli,$data)
+function purchase_request($method,$mysqli,$data)
 {	
 	$data = json_decode($data, true);
 	
@@ -93,16 +93,40 @@ function po_request($method,$mysqli,$data)
 	if ($method=="create")
 	{
 		
-		//Getting the data 
-		$created_date = date('Y-m-d H:i:s');
-		$product_name = $data['product_name'];
-		echo $product_name;
+		// //Getting the data 
+		 $purchase_order_id = $data['purchase_order_id'];
+		$purchase_order_to = $data['purchase_order_to'];
+		$date = $data['date'];
+		$qtn_Dt = $data['qtn_Dt'];
+		
+		$req_Dt = $data['req_Dt'];
+
+		$unit = $data['unit'];
+
+		$payment = $data['payment'];
+		$transport = $data['transport'];
+		$delivery_schedule = $data['delivery_schedule'];
 		$raw_materials = $data['raw_materials'];
-	
-		$stmt = $mysqli->prepare('INSERT INTO po_request (created_date, product_name,raw_materials) VALUES (?, ?,?)');
-		$stmt->bind_param('sss', $created_date,$product_name,$raw_materials);
-		$result = $stmt->execute();
-		echo json_encode($result);
+		
+
+
+
+		$stmt = $mysqli->prepare('INSERT INTO purchase_request(purchase_order_id,purchase_order_to,date,qtn_Dt,req_Dt,unit,payment,transport,delivery_schedule) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->bind_param('sssssssss', $purchase_order_id,$purchase_order_to,$date,$qtn_Dt,$req_Dt,$unit,$payment,
+			$transport,$delivery_schedule);
+				$result = $stmt->execute();		
+		
+		if(json_encode($result))
+		{
+			foreach ($raw_materials as $key => $value) {
+			$stmt = $mysqli->prepare('INSERT INTO purchase_request_raw_materials(purchase_order_id,raw_material_id,raw_material_name,raw_material_desc,raw_material_qty,raw_material_unit,raw_material_rate,raw_material_amt,raw_material_quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
+			
+			$stmt->bind_param('sssssssss', $purchase_order_id,$value['raw_material_id'],$value['raw_material_name'],$value['raw_material_desc'],$value['raw_material_qty'],$value['raw_material_unit'],$value['raw_material_rate'],$value['raw_material_amt'],$value['raw_material_quality']);
+			
+			$result = $stmt->execute();
+			echo json_encode($result);				
+			}
+		}
 	}
 
 	if ($method=="delete")
