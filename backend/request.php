@@ -154,15 +154,15 @@ function purchase_request($method,$mysqli,$data)
 		}
 	}
 
-	if ($method=="delete")
-	{
+	// if ($method=="delete")
+	// {
 
-		$request_id = $data['request_id'];
-		$stmt = $mysqli->prepare('DELETE FROM po_request WHERE request_id = ?');
-		$stmt->bind_param('s', $request_id);
-		$result = $stmt->execute();
-		echo json_encode($result);
-	}
+	// 	$request_id = $data['request_id'];
+	// 	$stmt = $mysqli->prepare('DELETE FROM po_request WHERE request_id = ?');
+	// 	$stmt->bind_param('s', $request_id);
+	// 	$result = $stmt->execute();
+	// 	echo json_encode($result);
+	// }
 
 	if($method=="update")
 	{
@@ -190,7 +190,69 @@ function purchase_request($method,$mysqli,$data)
 		echo $result;
 	}
 
+	if($method=="approve")
+	{
+		
+		$purchase_order_id = $data['purchase_order_id'];
+		if($data['type']=="full")
+		{
+			$stmt = $mysqli->prepare('UPDATE purchase_request SET status = "Complete" WHERE purchase_order_id = ?');
+			$stmt->bind_param('s', $data['purchase_order_id']);
+			$result = $stmt->execute();
+			if($result)
+			{
+				$stmt = $mysqli->prepare('UPDATE purchase_request_raw_materials SET status = "Complete" WHERE purchase_order_id = ?');
+				$stmt->bind_param('s', $data['purchase_order_id']);
+				$result = $stmt->execute();
+			}
+			echo $result;
+		}
+		else if($data['type']=="partial")
+		{
+			$stmt = $mysqli->prepare('UPDATE purchase_request SET status = "Partial" WHERE purchase_order_id = ?');
+			$stmt->bind_param('s', $data['purchase_order_id']);
+			$result = $stmt->execute();
+			
+			if($result)
+			{
+				//print_r($data);
+				$raw_materials = $data['raw_materials'];
 
+				foreach ($raw_materials as $key => $value) {
+					$raw_material_id = $value['raw_material_id'];
+					$status = $value['status'];
+					echo $raw_material_id;
+					$stmt = $mysqli->prepare('UPDATE purchase_request_raw_materials SET status = ? WHERE purchase_order_id = ? and raw_material_id = ?');
+					$stmt->bind_param('sss', $status,$purchase_order_id,$raw_material_id);
+					$result = $stmt->execute();
+					echo $result;
+				}
+
+		}
+	}
+}
+
+		if($method=="decline")
+		{
+		
+		if($data['type']=="full")
+		{
+			$purchase_order_id = $data['purchase_order_id'];
+			$stmt = $mysqli->prepare('UPDATE purchase_request SET status = "Rejected" WHERE purchase_order_id = ?');
+			$stmt->bind_param('s', $data['purchase_order_id']);
+			$result = $stmt->execute();
+			if($result)
+			{
+				$stmt = $mysqli->prepare('UPDATE purchase_request_raw_materials SET status = "Rejected" WHERE purchase_order_id = ?');
+				$stmt->bind_param('s', $data['purchase_order_id']);
+				$result = $stmt->execute();
+			}
+			echo $result;
+		}
+	
+	}
+
+	
 
 }
 
