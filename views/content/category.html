@@ -24,10 +24,67 @@
             <h3>Purchase Order
               <span class="tableTotal">(Total : {{totalItems}}) </span>
             </h3>
+            <label>To:</label>
+            <div class="po-form-outer">
+              <input type="text" class="po-form-to" ng-model="formData.purchase_order_to">
+            </div>
+
+            <div class="pull-right">
+              <div>
+                <label>P.O. No. :</label>
+                <div class="po-form-outer">
+                  <input type="text" class="po-form-to" ng-model="formData.purchase_order_id">
+                </div>
+              </div>
+              <div>
+                <label>Date :</label>
+                <div class="po-form-outer">
+                  <input type="date" class="po-form-to" ng-model="formData.date">
+                </div>
+              </div>
+              <div>
+                <label>Qtn. Date :</label>
+                <div class="po-form-outer">
+                  <input type="date" class="po-form-to" ng-model="formData.qtn_Dt">
+                </div>
+              </div>
+              <div>
+                <label>Req. Date :</label>
+                <div class="po-form-outer">
+                  <input type="date" class="po-form-to" ng-model="formData.req_Dt">
+                </div>
+              </div>
+              <div>
+                <label>For Unit :</label>
+                <div class="po-form-outer">
+                  <input type="text" class="po-form-to" ng-model="formData.unit">
+                </div>
+              </div>
+              <div>
+                <label>Payment :</label>
+                <div class="po-form-outer">
+                  <input type="text" class="po-form-to" ng-model="formData.payment">
+                </div>
+              </div>
+              <div>
+                <label>Transport :</label>
+                <div class="po-form-outer">
+                  <input type="text" class="po-form-to" ng-model="formData.transport">
+                </div>
+              </div>
+              <div>
+                  <label>Delivery Schedule :</label>
+                  <div class="po-form-outer">
+                    <input type="text" class="po-form-to" ng-model="formData.delivery_schedule">
+                  </div>
+                </div>
+
+            </div>
+
           </div>
-          <div class="table-responsive ">
+          <div class="table-responsive">
             <!--<div class="table-responsive " ng-show="totalItems>0 ">-->
-            <table class="table">
+            <table class="table  table-border">
               <thead>
                 <tr>
                   <th>#</th>
@@ -35,27 +92,36 @@
                     Name
                   </th>
                   <th>
-                    Quantity
+                    Description
                   </th>
                   <th>
                     Quality
                   </th>
                   <th>
-                    Price
+                    Quantity
+                  </th>
+                  <th>
+                    Unit
+                  </th>
+                  <th>
+                    Rate
+                  </th>
+                  <th>
+                    Amount
                   </th>
                   <th ng-if="view">Actions</th>
                 </tr>
               </thead>
               <tbody>
                 <!--<tr ng-repeat="item in items">-->
-                <tr ng-repeat="item in formData track by $index">
+                <tr ng-repeat="item in formData.raw_materials track by $index">
                   <!--<tr>-->
                   <!-- for pagination -->
                   <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
                   <td>{{$index + 1}}</td>
 
                   <td>
-                    <ui-select ng-model="item.name" theme="bootstrap" style="width: 300px;" title="Choose a person">
+                    <ui-select ng-model="item.raw_material_name" theme="bootstrap" style="width: 150px;" title="Choose a person">
                       <ui-select-match placeholder="Name">{{$select.selected.name}}</ui-select-match>
                       <ui-select-choices repeat="prod.name as prod in products" refresh="products[0].name = $select.search" refresh-delay="5">
                         <div ng-bind-html="(prod.name | highlight: $select.search) +' (new)'"></div>
@@ -63,10 +129,22 @@
                     </ui-select>
                   </td>
                   <td>
-                    <input type="number" style="width: 50px;" ng-model="item.qnty">
+                    <input type="text" style="width: 150px;" ng-model="item.raw_material_desc">
                   </td>
                   <td>
-                    <input type="number" style="width: 50px;" ng-model="item.qlty">
+                      <input type="text" style="width: 50px;" ng-model="item.raw_material_quality">
+                    </td>
+                  <td>
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_qty">
+                  </td>
+                  <td>
+                    <input type="text" style="width: 50px;" ng-model="item.raw_material_unit">
+                  </td>
+                  <td>
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_rate">
+                  </td>
+                  <td>
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_amt">
                   </td>
                   <td>
                     <input type="number" style="width: 50px;" ng-model="item.price">
@@ -79,7 +157,15 @@
                 </tr>
               </tbody>
             </table>
+
+            <div class="final-amt">
+                <label>Total :</label>
+                <div class="po-form-outer pull-right">
+                  <input type="number" name="" id="" class="po-form-to" ng-model="formData.totalAmt">
+                </div>
+              </div>
           </div>
+         
           <div class="tableData ">
             <input type="button" class="btn btn-success pull-right" ng-click="addRow()" value="Add" ng-if="view">
             </input>
@@ -87,7 +173,7 @@
           <div>
 
           </div>
-         
+
           <div class="text-center mt20 odd-even-button">
             <button class="btn btn-default" type="submit" ng-click="saveData(formData)" ng-if="view">Save</button>
             <button class="btn btn-default" ui-sref="purchase-order">Cancel</button>

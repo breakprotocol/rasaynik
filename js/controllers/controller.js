@@ -69,15 +69,22 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 $scope.products.unshift("");
             });
       
-        $scope.formData=[];
+        $scope.formData={
+            "raw_materials":[]
+        };
         $scope.addRow=function(){
           var obj = {
-            "name":"",
-            "qnty":"",
-            "qlty":"",
-            "price":""
+            "raw_material_id":"",
+            "raw_material_name":"",
+            "raw_material_desc":"",
+            "raw_material_quality":"",
+            "raw_material_qty":"",
+            "raw_material_unit":"",
+            "raw_material_rate":"",
+            "raw_material_amt":"",
+            "totalAmt":""
           }
-          $scope.formData.push(obj);
+          $scope.formData.raw_materials.push(obj);
         }
 
 
@@ -90,15 +97,12 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.addRow();
       
         $scope.removeRow=function(index){
-          $scope.row.splice(index,1);
+          $scope.formData.raw_materials.splice(index,1);
         }
 
         $scope.saveData = function(formData){
-            var saveObj={
-                "raw_materials":formData,
-                "product_name":"kaiko h ye"
-            }
-            NavigationService.savePO('/po_request/create',saveObj,function(data){
+          
+            NavigationService.savePO('/purchase_request/create',formData,function(data){
                 console.log(data);
             })
         }
