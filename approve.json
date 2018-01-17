@@ -1,0 +1,19 @@
+partial approve
+
+data:
+{"type":"partial","purchase_order_id":"115","raw_materials":[{"raw_material_id":"101","status":"reject"},{"raw_material_id":"102","status":"approve"},{"raw_material_id":"103","status":"approve"}]}
+
+url: http://localhost/rasaynik/backend/request.php/purchase_request/approve
+
+full approve
+data:
+{"type":"full","purchase_order_id":"101"}
+
+url: http://localhost/rasaynik/backend/request.php/purchase_request/approve
+
+full reject
+
+data:
+{"type":"full","purchase_order_id":"101"}
+
+url: http://localhost/rasaynik/backend/request.php/purchase_request/decline
