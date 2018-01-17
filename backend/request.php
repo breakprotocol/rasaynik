@@ -42,34 +42,53 @@ function purchase_request($method,$mysqli,$data)
 {	
 	$data = json_decode($data, true);
 	
+	if($method=="getCount")
+	{
+	// Find out how many items are in the table
+		$query = "SELECT COUNT(*) FROM purchase_request";
+    	$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
+		$row =  $result->fetch_row();
+		$total =  $row[0];
+		echo $total;		
+	}
 	if ($method=="getAll")
 	{
 
 	 // Find out how many items are in the table
-		$query = "SELECT COUNT(*) FROM po_request";
+		$query = "SELECT COUNT(*) FROM purchase_request";
     	$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 		$row =  $result->fetch_row();
 		$total =  $row[0];
     // How many items to list per page
-    	$limit = 10;
+    	$limit = 1;
 
     // How many pages will there be
     	$pages = ceil($total / $limit);
 	// What page are we currently on?
-    $page = $data['page'];
+    	$page = $data['page'];
 
     // Calculate the offset for the query
-    $offset = ($page - 1)  * $limit;
+    	$offset = ($page - 1)  * $limit;
 
 
 
 
-		$stmt=$mysqli->prepare('SELECT * from po_request order by created_date desc limit ? offset ?');
+		$stmt=$mysqli->prepare('SELECT * from purchase_request order by date desc limit ? offset ?');
 		$stmt->bind_param('ss', $limit,$offset);
 		$stmt->execute();
 		$result = $stmt->get_result();
-		$json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-		echo json_encode($json );
+		$purchase_order = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+	//	$purchase_order = json_encode($json );
+
+		foreach ($purchase_order as $key => $value) {
+		$stmt=$mysqli->prepare('SELECT * from purchase_request_raw_materials where purchase_order_id = ?');
+		$stmt->bind_param('s', $value['purchase_order_id']);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$raw_material_json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+		}
+		$purchase_order['raw_materials'] = $raw_material_json;
+		echo json_encode($purchase_order) ;
 	}
 
 	if ($method=="getOne")
@@ -107,16 +126,17 @@ function purchase_request($method,$mysqli,$data)
 		$transport = $data['transport'];
 		$delivery_schedule = $data['delivery_schedule'];
 		$raw_materials = $data['raw_materials'];
+		$totalAmt = $data['totalAmt'];
 		
 
 
 
-		$stmt = $mysqli->prepare('INSERT INTO purchase_request(purchase_order_id,purchase_order_to,date,qtn_Dt,req_Dt,unit,payment,transport,delivery_schedule) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
-		$stmt->bind_param('sssssssss', $purchase_order_id,$purchase_order_to,$date,$qtn_Dt,$req_Dt,$unit,$payment,
-			$transport,$delivery_schedule);
+		$stmt = $mysqli->prepare('INSERT INTO purchase_request(purchase_order_id,purchase_order_to,date,qtn_Dt,req_Dt,unit,payment,transport,delivery_schedule,totalAmt) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)');
+		$stmt->bind_param('ssssssssss', $purchase_order_id,$purchase_order_to,$date,$qtn_Dt,$req_Dt,$unit,$payment,
+			$transport,$delivery_schedule,$totalAmt);
 				$result = $stmt->execute();		
 		
-		if(json_encode($result))
+		if($result)
 		{
 			foreach ($raw_materials as $key => $value) {
 			$stmt = $mysqli->prepare('INSERT INTO purchase_request_raw_materials(purchase_order_id,raw_material_id,raw_material_name,raw_material_desc,raw_material_qty,raw_material_unit,raw_material_rate,raw_material_amt,raw_material_quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
@@ -126,6 +146,11 @@ function purchase_request($method,$mysqli,$data)
 			$result = $stmt->execute();
 			echo json_encode($result);				
 			}
+		}
+		else
+
+		{
+			echo "Problem inserting data";
 		}
 	}
 
@@ -164,6 +189,8 @@ function purchase_request($method,$mysqli,$data)
 
 		echo $result;
 	}
+
+
 
 }
 

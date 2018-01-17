@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 15, 2018 at 05:40 PM
+-- Generation Time: Jan 17, 2018 at 04:14 PM
 -- Server version: 10.1.19-MariaDB
 -- PHP Version: 7.0.13
 
@@ -23,29 +23,6 @@ SET time_zone = "+00:00";
 -- --------------------------------------------------------
 
 --
--- Table structure for table `po_request`
---
-
-CREATE TABLE `po_request` (
-  `request_id` int(255) NOT NULL,
-  `raw_materials` varchar(100) DEFAULT NULL,
-  `created_date` date DEFAULT NULL,
-  `product_name` varchar(100) DEFAULT NULL,
-  `quantity_check` varchar(10) DEFAULT NULL,
-  `quality_check` varchar(10) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `po_request`
---
-
-INSERT INTO `po_request` (`request_id`, `raw_materials`, `created_date`, `product_name`, `quantity_check`, `quality_check`) VALUES
-(1, 'abc', '2017-12-14', 'abc', NULL, NULL),
-(2, 'a,b,c', '2017-12-20', 'methyl', NULL, NULL);
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `product_request`
 --
 
@@ -58,6 +35,101 @@ CREATE TABLE `product_request` (
   `request_confirmation` varchar(10) DEFAULT NULL,
   `product_quantity` int(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_request`
+--
+
+CREATE TABLE `purchase_request` (
+  `purchase_order_id` varchar(100) NOT NULL,
+  `purchase_order_to` varchar(100) DEFAULT NULL,
+  `date` varchar(100) DEFAULT NULL,
+  `qtn_Dt` varchar(100) DEFAULT NULL,
+  `req_Dt` varchar(100) DEFAULT NULL,
+  `unit` varchar(100) DEFAULT NULL,
+  `payment` varchar(100) DEFAULT NULL,
+  `transport` varchar(100) DEFAULT NULL,
+  `delivery_schedule` varchar(100) DEFAULT NULL,
+  `status` varchar(100) DEFAULT NULL,
+  `totalAmt` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `purchase_request`
+--
+
+INSERT INTO `purchase_request` (`purchase_order_id`, `purchase_order_to`, `date`, `qtn_Dt`, `req_Dt`, `unit`, `payment`, `transport`, `delivery_schedule`, `status`, `totalAmt`) VALUES
+('101', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('102', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('103', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('104', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('105', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('106', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('107', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('108', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('109', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('110', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('111', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, ''),
+('112', 'vishal', '2017-01-01', '2017-09-08', '2018-01-09', 'lts', 'cash', 'abc', 'sc', NULL, '1000');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `purchase_request_raw_materials`
+--
+
+CREATE TABLE `purchase_request_raw_materials` (
+  `purchase_order_id` varchar(100) DEFAULT NULL,
+  `raw_material_id` varchar(100) DEFAULT NULL,
+  `raw_material_name` varchar(100) DEFAULT NULL,
+  `raw_material_desc` varchar(100) DEFAULT NULL,
+  `raw_material_qty` varchar(100) DEFAULT NULL,
+  `raw_material_unit` varchar(100) DEFAULT NULL,
+  `raw_material_rate` varchar(100) DEFAULT NULL,
+  `raw_material_amt` varchar(100) DEFAULT NULL,
+  `raw_material_quality` varchar(100) DEFAULT NULL,
+  `status` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `purchase_request_raw_materials`
+--
+
+INSERT INTO `purchase_request_raw_materials` (`purchase_order_id`, `raw_material_id`, `raw_material_name`, `raw_material_desc`, `raw_material_qty`, `raw_material_unit`, `raw_material_rate`, `raw_material_amt`, `raw_material_quality`, `status`) VALUES
+('103', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('103', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('101', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('101', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('102', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('102', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('104', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('104', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('105', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('105', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('106', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('106', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('107', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('107', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('108', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('108', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('109', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('109', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('109', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('109', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('109', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('109', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('110', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('110', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('110', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('110', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('110', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('110', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('111', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('111', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('112', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL),
+('112', '101', 'abc', 'def', '25', 'ltr', '2500', '2500', 'good', NULL);
 
 -- --------------------------------------------------------
 
@@ -98,16 +170,16 @@ CREATE TABLE `store_room` (
 --
 
 --
--- Indexes for table `po_request`
---
-ALTER TABLE `po_request`
-  ADD PRIMARY KEY (`request_id`);
-
---
 -- Indexes for table `product_request`
 --
 ALTER TABLE `product_request`
   ADD PRIMARY KEY (`request_id`);
+
+--
+-- Indexes for table `purchase_request`
+--
+ALTER TABLE `purchase_request`
+  ADD PRIMARY KEY (`purchase_order_id`);
 
 --
 -- Indexes for table `raw_materials`
@@ -125,11 +197,6 @@ ALTER TABLE `store_room`
 -- AUTO_INCREMENT for dumped tables
 --
 
---
--- AUTO_INCREMENT for table `po_request`
---
-ALTER TABLE `po_request`
-  MODIFY `request_id` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `product_request`
 --
