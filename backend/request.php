@@ -60,7 +60,7 @@ function purchase_request($method,$mysqli,$data)
 		$row =  $result->fetch_row();
 		$total =  $row[0];
     // How many items to list per page
-    	$limit = 1;
+    	$limit = 10;
 
     // How many pages will there be
     	$pages = ceil($total / $limit);
@@ -80,33 +80,37 @@ function purchase_request($method,$mysqli,$data)
 		$purchase_order = mysqli_fetch_all ($result, MYSQLI_ASSOC);
 	//	$purchase_order = json_encode($json );
 
-		foreach ($purchase_order as $key => $value) {
-		$stmt=$mysqli->prepare('SELECT * from purchase_request_raw_materials where purchase_order_id = ?');
-		$stmt->bind_param('s', $value['purchase_order_id']);
-		$stmt->execute();
-		$result = $stmt->get_result();
-		$raw_material_json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-		}
-		$purchase_order['raw_materials'] = $raw_material_json;
+		// foreach ($purchase_order as $key => $value) {
+		// $stmt=$mysqli->prepare('SELECT * from purchase_request_raw_materials where purchase_order_id = ?');
+		// $stmt->bind_param('s', $value['purchase_order_id']);
+		// $stmt->execute();
+		// $result = $stmt->get_result();
+		// $raw_material_json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+		// }
+		// $purchase_order['raw_materials'] = $raw_material_json;
 		echo json_encode($purchase_order) ;
 	}
 
 	if ($method=="getOne")
 	{
 
-		$stmt = $mysqli->prepare('SELECT * FROM po_request WHERE request_id = ?');
-		$stmt->bind_param('s', $data['request_id']);
+		$purchase_order_id = $data['purchase_order_id'];
+		$stmt=$mysqli->prepare('SELECT * from purchase_request where purchase_order_id = ?');
+		$stmt->bind_param('s', $purchase_order_id);
 		$stmt->execute();
 		$result = $stmt->get_result();
-		$json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-		echo json_encode($json );
+		$purchase_order = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+	//	$purchase_order = json_encode($json );
 
-		// echo "pp";
-		// $query="select * from categories where _id=" + $data['_id'];
-		// echo $query;
-		// $result = $mysqli->query($query) or die($mysqli->error.__LINE__);
-		// $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-		// echo json_encode($json );
+		foreach ($purchase_order as $key => $value) {
+		$stmt=$mysqli->prepare('SELECT * from purchase_request_raw_materials where purchase_order_id = ?');
+		$stmt->bind_param('s', $purchase_order_id);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$raw_material_json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+		}
+		$purchase_order['raw_materials'] = $raw_material_json;
+		echo json_encode($purchase_order) ;	
 	}
 
 	if ($method=="create")
@@ -139,6 +143,25 @@ function purchase_request($method,$mysqli,$data)
 		if($result)
 		{
 			foreach ($raw_materials as $key => $value) {
+			$raw_material_id = $value['raw_material_id'];
+			$raw_material_name = $value['raw_material_name'];
+
+			if(empty($raw_material_id))
+			{
+				
+				$max_raw_material_id =  $mysqli->query("select max(ID) ID from raw_materials")->fetch_object()->ID;
+				$max_raw_material_id++;
+				$stmt = $mysqli->prepare('INSERT INTO raw_materials(id,name) values (?,?)');
+				$stmt->bind_param('ss',$max_raw_material_id,$raw_material_name);
+				$result = $stmt->execute();
+				if($result)
+					$raw_material_id = $max_raw_material_id;
+				else
+				{
+					echo "Theres some problem inserting the new raw material";
+					break;
+				}
+			}
 			$stmt = $mysqli->prepare('INSERT INTO purchase_request_raw_materials(purchase_order_id,raw_material_id,raw_material_name,raw_material_desc,raw_material_qty,raw_material_unit,raw_material_rate,raw_material_amt,raw_material_quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 			
 			$stmt->bind_param('sssssssss', $purchase_order_id,$value['raw_material_id'],$value['raw_material_name'],$value['raw_material_desc'],$value['raw_material_qty'],$value['raw_material_unit'],$value['raw_material_rate'],$value['raw_material_amt'],$value['raw_material_quality']);
