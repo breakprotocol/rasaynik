@@ -51,110 +51,178 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
 
-        if($stateParams.id){
-            $scope.view=false
-            var obj={
-                "request_id":$stateParams.id
+        $scope._ = _;
+
+        $scope.formData = {
+            "raw_materials": []
+        };
+        $scope.addRow = function () {
+            var obj = {
+                "raw_material_id": "",
+                "raw_material_name": "",
+                "raw_material_desc": "",
+                "raw_material_quality": "",
+                "raw_material_qty": "",
+                "raw_material_unit": "",
+                "raw_material_rate": "",
+                "raw_material_amt": "",
+                "totalAmt": "",
+                "raw_material": {
+                    "raw_material_id": "",
+                    "raw_material_name": ""
+                },
+                "products": _.cloneDeep($scope.products)
             }
-            NavigationService.getOne('/po_request/getOne',obj,function(data){
-                $scope.formData = data;
+            $scope.formData.raw_materials.push(obj);
+        }
+
+        if ($stateParams.id) {
+            $scope.view = false
+            var obj = {
+                "purchase_order_id": $stateParams.id
+            }
+            NavigationService.getOne('/purchase_request/getOne', obj, function (data) {
+                $scope.formData = data[0];
+                $scope.formData.raw_materials = data['raw_materials'];
             })
-        }else{
-            $scope.view=true;
+            $scope.readonly = true;
+        } else {
+            $scope.view = true;
+            $scope.addRow();
+            $scope.readonly = false;
+
         }
 
-        $scope.raw_materials = NavigationService.getAllRaw_materials('/raw_materials/getAll',$scope.data,
-            function(data){
-                $scope.products=data;
-                $scope.products.unshift("");
+        NavigationService.getAllRaw_materials('/raw_materials/getAll', $scope.data,
+            function (data) {
+                $scope.products = data;
+                $scope.products.unshift({
+                    'id': "",
+                    "name": ""
+                });
             });
-      
-        $scope.formData={
-            "raw_materials":[]
-        };
-        $scope.addRow=function(){
-          var obj = {
-            "raw_material_id":"",
-            "raw_material_name":"",
-            "raw_material_desc":"",
-            "raw_material_quality":"",
-            "raw_material_qty":"",
-            "raw_material_unit":"",
-            "raw_material_rate":"",
-            "raw_material_amt":"",
-            "totalAmt":""
-          }
-          $scope.formData.raw_materials.push(obj);
+
+        $scope.removeRow = function (index) {
+            $scope.formData.raw_materials.splice(index, 1);
         }
 
-
-        $scope.refreshItems=function(tag){
-            console.log(tag);
-            $scope.products[0].name=tag;
-            // $scope.$apply();
-            
-        };
-        $scope.addRow();
-      
-        $scope.removeRow=function(index){
-          $scope.formData.raw_materials.splice(index,1);
+        $scope.setNewRaw = function (prod, val) {
+            if (!_.isEmpty(val)) {
+                prod[0].name = val;
+            }
         }
+        $scope.tp = {};
 
-        $scope.saveData = function(formData){
-          
-            NavigationService.savePO('/purchase_request/create',formData,function(data){
+        $scope.saveData = function (formData) {
+            console.log("formData.raw_materials", formData.raw_materials);
+            formData.raw_materials = _.map(formData.raw_materials, function (n) {
+                n = _.omit(n, ['products']);
+                return n;
+            });
+            console.log("formData.raw_materials", formData);
+
+            NavigationService.savePO('/purchase_request/create', formData, function (data) {
                 console.log(data);
             })
         }
-      })
 
-      .controller('PurchaseOrderCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        $scope.submitApproveReject=function(obj){
+            var raw_material = _.map(obj.raw_materials,function(n){
+                return {
+                    "raw_material_id":n.raw_material_id,
+                    "status":n.status
+                }
+            });
+            var saveObj={
+                "type":"partial",
+                "purchase_order_id":obj.purchase_order_id,
+                "raw_materials":raw_material
+            }
+            console.log(saveObj);
+            NavigationService.approveDecline('/purchase_request/approve',saveObj,function(data){
+                console.log(data);
+            })
+        };
+    })
+
+    .controller('PurchaseOrderCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
         $scope.template = TemplateService.changecontent("purchaseorder");
         $scope.menutitle = NavigationService.makeactive("Purchase Order(PO)");
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
 
-        NavigationService.getAllPO('/po_request/getAll',function(data){
-            $scope.formData=data;
-        });
-      
         $scope.formData = {};
         $scope.formData.page = 1;
         $scope.formData.type = '';
         $scope.formData.keyword = '';
-      
+
+        $scope.viewTable = function () {
+
+            $scope.url = "/purchase_request/getAll";
+            // $scope.search = $scope.formData.keyword;
+            $scope.formData.page = $scope.formData.page++;
+            NavigationService.apiCall($scope.url, $scope.formData, function (data) {
+                $scope.formData = data
+            });
+        }
+        $scope.viewTable();
+
+        // NavigationService.getAllPO('/purchase_request/getAll', {
+        //     "page": 1
+        // }, function (data) {
+        //     $scope.formData = data;
+        // });
+
+        NavigationService.getCount('/purchase_request/getCount', function (data) {
+            $scope.totalItems = data;
+        });
+
+        $scope.viewTable = function () {
+            var pagenumber = {
+                "page": $scope.formData.page++
+            };
+            NavigationService.getAllPO('/purchase_request/getAll', pagenumber, function (data) {
+                $scope.formData = data;
+            });
+        };
+
+
+
         // credentials--0 for PO Department
         // credentials--1 for admin 
         // change and see the dii=fference
-        $.jStorage.set("profile",{'credentials':0});
+        $.jStorage.set("profile", {
+            'credentials': 1
+        });
         $scope.profile = $.jStorage.get("profile");
-        
-        // $scope.products =[{
-        //     "name":"A"
-        //   },{
-        //     "name":"B"
-        //   },{
-        //     "name":"C"
-        //   },{
-        //     "name":"D"
-        //   }];
-        
-        //   $scope.row=[];
-        //   $scope.addRow=function(){
-        //     var obj = {
-        //       "name":"A",
-        //       "qnty":12,
-        //       "qlty":22,
-        //       "price":200,
-        //       "status":0
 
-        //     }
-        //     $scope.row.push(obj);
-        //   }
-        //   $scope.addRow();
+        $scope.approveDecline = function (flag, item) {
+            console.log(flag, item);
+            var sendObj = {
+                "type": "full",
+                "purchase_order_id": item.purchase_order_id
+            };
+
+            if (flag == 1) {
+                NavigationService.approveDecline('/purchase_request/approve', sendObj, function (data) {
+                    if (data == 1) {
+                        item.status = 'Complete'
+                    }
+                });
+            } else if (flag == 0) {
+                NavigationService.approveDecline('/purchase_request/decline', sendObj, function (data) {
+                    if (data == 1) {
+                        item.status = 'Rejected'
+                    }
+                });
+            }
+
+        }
+
+      
 
 
-        
-       
-      });
+
+
+    });

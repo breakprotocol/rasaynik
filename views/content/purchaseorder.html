@@ -59,21 +59,21 @@
                           <div  ng-bind-html="(prod.name | highlight: $select.search) +' (new)'"></div>
                         </ui-select-choices>
                       </ui-select> -->
-                      <span>{{item.request_id}}</span>
+                      <span>{{item.purchase_order_id}}</span>
                     </td>
                     <th>
-                        <span class="fa fa-eye fa-2x pull-right pointer" ui-sref="category({'id':item.request_id})"></span>
+                        <span class="fa fa-eye fa-2x pull-right pointer" ui-sref="category({'id':item.purchase_order_id})"></span>
                       </th>
                     <td ng-if="profile.credentials==0">
-                          <i class="fa fa-thumbs-up success fa-2x" ng-if="item.status==1"></i>
-                          <i class="fa fa-thumbs-down danger fa-2x" ng-if="item.status==0"></i> 
+                          <i class="fa fa-thumbs-up success fa-2x" ng-if="item.status=='Complete'"></i>
+                          <i class="fa fa-thumbs-down danger fa-2x" ng-if="item.status=='Rejected'"></i> 
                           <i class="fa fa-clock-o fa-2x" ng-if="!item.status"></i>
                       </td>
                     <td ng-if="profile.credentials==1">
-                      <a class="btn" ng-class="{'btn-success':item.status==1}" ng-click="item.status=1">
+                      <a class="btn" ng-class="{'btn-success':item.status=='Complete'}" ng-click="approveDecline(1,item)" >
                         <i class="fa fa-thumbs-up fa-2x"></i> 
                       </a>
-                      <a class="btn" ng-class="{'btn-danger':item.status==0}" ng-click="item.status=0">
+                      <a class="btn" ng-class="{'btn-danger':item.status=='Rejected'}" ng-click="approveDecline(0,item)">
                         <i class="fa fa-thumbs-down fa-2x"></i> 
                       </a>
                     </td>
@@ -87,7 +87,7 @@
               <!-- <div class="tableData " ng-show="totalItems===undefined ">
                 <h5>Loading Data</h5>
               </div> -->
-              <ul ng-change="viewTable()" uib-pagination total-items="totalItems" items-per-page="maxRow" ng-model="formData.page"
+              <ul ng-if="totalItems" ng-change="viewTable()" uib-pagination total-items="totalItems" items-per-page="10" ng-model="formData.page"
                 max-size="template.pageMax" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
             </div>
           </div>

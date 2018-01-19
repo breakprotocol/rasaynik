@@ -26,56 +26,56 @@
             </h3>
             <label>To:</label>
             <div class="po-form-outer">
-              <input type="text" class="po-form-to" ng-model="formData.purchase_order_to">
+              <input type="text" class="po-form-to" ng-model="formData.purchase_order_to" ng-readonly="readonly">
             </div>
 
             <div class="pull-right">
               <div>
                 <label>P.O. No. :</label>
                 <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.purchase_order_id">
+                  <input type="text" class="po-form-to" ng-model="formData.purchase_order_id" ng-readonly="readonly">
                 </div>
               </div>
               <div>
                 <label>Date :</label>
                 <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.date">
+                  <input type="date" class="po-form-to" ng-model="formData.date" ng-readonly="readonly">
                 </div>
               </div>
               <div>
                 <label>Qtn. Date :</label>
                 <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.qtn_Dt">
+                  <input type="date" class="po-form-to" ng-model="formData.qtn_Dt" ng-readonly="readonly">
                 </div>
               </div>
               <div>
                 <label>Req. Date :</label>
                 <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.req_Dt">
+                  <input type="date" class="po-form-to" ng-model="formData.req_Dt" ng-readonly="readonly">
                 </div>
               </div>
               <div>
                 <label>For Unit :</label>
                 <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.unit">
+                  <input type="text" class="po-form-to" ng-model="formData.unit" ng-readonly="readonly">
                 </div>
               </div>
               <div>
                 <label>Payment :</label>
                 <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.payment">
+                  <input type="text" class="po-form-to" ng-model="formData.payment" ng-readonly="readonly">
                 </div>
               </div>
               <div>
                 <label>Transport :</label>
                 <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.transport">
+                  <input type="text" class="po-form-to" ng-model="formData.transport" ng-readonly="readonly">
                 </div>
               </div>
               <div>
                   <label>Delivery Schedule :</label>
                   <div class="po-form-outer">
-                    <input type="text" class="po-form-to" ng-model="formData.delivery_schedule">
+                    <input type="text" class="po-form-to" ng-model="formData.delivery_schedule" ng-readonly="readonly">
                   </div>
                 </div>
 
@@ -110,6 +110,7 @@
                     Amount
                   </th>
                   <th ng-if="view">Actions</th>
+                  <th ng-if="!view">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -120,38 +121,46 @@
                   <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
                   <td>{{$index + 1}}</td>
 
-                  <td>
-                    <ui-select ng-model="item.raw_material_name" theme="bootstrap" style="width: 150px;" title="Choose a person">
+                  <td ng-if="!readonly">
+                    <ui-select ng-model="item.raw_material" theme="bootstrap" style="width: 150px;" title="Choose a person">
                       <ui-select-match placeholder="Name">{{$select.selected.name}}</ui-select-match>
-                      <ui-select-choices repeat="prod.name as prod in products" refresh="products[0].name = $select.search" refresh-delay="5">
+                      <ui-select-choices repeat="{'raw_material_id':prod.id,'raw_material_name':prod.name} as prod in item.products" refresh="setNewRaw(item.products,$select.search)" on-select="setNewRaw(products,$select.search)" refresh-delay="5">
                         <div ng-bind-html="(prod.name | highlight: $select.search) +' (new)'"></div>
                       </ui-select-choices>
                     </ui-select>
                   </td>
-                  <td>
-                    <input type="text" style="width: 150px;" ng-model="item.raw_material_desc">
+                  <td ng-if="readonly">
+                    <span>{{item.raw_material_name}}</span>
                   </td>
                   <td>
-                      <input type="text" style="width: 50px;" ng-model="item.raw_material_quality">
+                    <input type="text" style="width: 150px;" ng-model="item.raw_material_desc" ng-readonly="readonly">
+                  </td>
+                  <td>
+                      <input type="text" style="width: 50px;" ng-model="item.raw_material_quality" ng-readonly="readonly">
                     </td>
                   <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_qty">
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_qty" ng-readonly="readonly">
                   </td>
                   <td>
-                    <input type="text" style="width: 50px;" ng-model="item.raw_material_unit">
+                    <input type="text" style="width: 50px;" ng-model="item.raw_material_unit" ng-readonly="readonly">
                   </td>
                   <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_rate">
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_rate" ng-readonly="readonly">
                   </td>
                   <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_amt">
-                  </td>
-                  <td>
-                    <input type="number" style="width: 50px;" ng-model="item.price">
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_amt" ng-readonly="readonly">
                   </td>
                   <td ng-if="view">
                     <a class="btn btn-danger" ng-click="removeRow($index)">
                       <i class="fa fa-trash"></i> Remove
+                    </a>
+                  </td>
+                  <td>
+                    <a class="btn" ng-class="{'btn-success':item.status=='approve'}" ng-click="item.status='approve'" >
+                      <i class="fa fa-thumbs-up fa-2x"></i> 
+                    </a>
+                    <a class="btn" ng-class="{'btn-danger':item.status=='reject'}" ng-click="item.status='reject'">
+                      <i class="fa fa-thumbs-down fa-2x"></i> 
                     </a>
                   </td>
                 </tr>
@@ -161,7 +170,7 @@
             <div class="final-amt">
                 <label>Total :</label>
                 <div class="po-form-outer pull-right">
-                  <input type="number" name="" id="" class="po-form-to" ng-model="formData.totalAmt">
+                  <input type="number" name="" id="" class="po-form-to" ng-model="formData.totalAmt" ng-readonly="readonly">
                 </div>
               </div>
           </div>
@@ -176,6 +185,8 @@
 
           <div class="text-center mt20 odd-even-button">
             <button class="btn btn-default" type="submit" ng-click="saveData(formData)" ng-if="view">Save</button>
+            <button class="btn btn-default" type="submit" ng-click="submitApproveReject(formData)">Submit</button>
+            
             <button class="btn btn-default" ui-sref="purchase-order">Cancel</button>
           </div>
         </div>

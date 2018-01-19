@@ -86,13 +86,11 @@ myApp.factory('NavigationService', function ($http) {
             });
         },
 
-        getAllPO: function(url,callback){
+        getAllPO: function(url,pagenumber,callback){
             $http({
                 method: "POST",
                 url: adminurl + url,
-                data:{
-                    "page":1
-                }
+                data:pagenumber
             }).then(function (data) {
                 callback(data.data);
             });
@@ -106,6 +104,35 @@ myApp.factory('NavigationService', function ($http) {
             }).then(function (data) {
                 callback(data.data);
             });
-        }
+        },
+
+        getCount:function(url,callback){
+            $http({
+                method: "POST",
+                url: adminurl + url
+            }).then(function (data) {
+                callback(data.data);
+            });
+        },
+
+        apiCall: function (url, formData, callback) {
+            $http.post(adminurl + url, formData).then(function (data) {
+                data = data.data;
+                callback(data);
+
+            });
+        },
+
+        approveDecline: function(url, formData, callback){
+            $http({
+                method: "POST",
+                url: adminurl + url,
+                data: formData
+            }).then(function (data) {
+                callback(data.data);
+            });
+        },
+
+       
     };
 });
