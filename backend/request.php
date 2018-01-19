@@ -143,8 +143,8 @@ function purchase_request($method,$mysqli,$data)
 		if($result)
 		{
 			foreach ($raw_materials as $key => $value) {
-			$raw_material_id = $value['raw_material_id'];
-			$raw_material_name = $value['raw_material_name'];
+			$raw_material_id = $value['raw_material']['raw_material_id'];
+			$raw_material_name = $value['raw_material']['raw_material_name'];
 
 			if(empty($raw_material_id))
 			{
@@ -164,7 +164,7 @@ function purchase_request($method,$mysqli,$data)
 			}
 			$stmt = $mysqli->prepare('INSERT INTO purchase_request_raw_materials(purchase_order_id,raw_material_id,raw_material_name,raw_material_desc,raw_material_qty,raw_material_unit,raw_material_rate,raw_material_amt,raw_material_quality) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)');
 			
-			$stmt->bind_param('sssssssss', $purchase_order_id,$value['raw_material_id'],$value['raw_material_name'],$value['raw_material_desc'],$value['raw_material_qty'],$value['raw_material_unit'],$value['raw_material_rate'],$value['raw_material_amt'],$value['raw_material_quality']);
+			$stmt->bind_param('sssssssss', $purchase_order_id,$raw_material_id,$value['raw_material']['raw_material_name'],$value['raw_material_desc'],$value['raw_material_qty'],$value['raw_material_unit'],$value['raw_material_rate'],$value['raw_material_amt'],$value['raw_material_quality']);
 			
 			$result = $stmt->execute();
 			echo json_encode($result);				
