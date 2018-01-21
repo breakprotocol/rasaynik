@@ -88,19 +88,21 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             $scope.readonly = true;
         } else {
             $scope.view = true;
-            $scope.addRow();
-            $scope.readonly = false;
-
-        }
-
-        NavigationService.getAllRaw_materials('/raw_materials/getAll', $scope.data,
+            NavigationService.getAllRaw_materials('/raw_materials/getAll', $scope.data,
             function (data) {
                 $scope.products = data;
                 $scope.products.unshift({
                     'id': "",
                     "name": ""
                 });
+                $scope.addRow();
             });
+           
+            $scope.readonly = false;
+
+        }
+
+      
 
         $scope.removeRow = function (index) {
             $scope.formData.raw_materials.splice(index, 1);
@@ -193,7 +195,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // credentials--1 for admin 
         // change and see the dii=fference
         $.jStorage.set("profile", {
-            'credentials': 1
+            'credentials': 0
         });
         $scope.profile = $.jStorage.get("profile");
 
