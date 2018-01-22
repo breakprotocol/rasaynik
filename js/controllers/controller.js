@@ -89,20 +89,18 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         } else {
             $scope.view = true;
             NavigationService.getAllRaw_materials('/raw_materials/getAll', $scope.data,
-            function (data) {
-                $scope.products = data;
-                $scope.products.unshift({
-                    'id': "",
-                    "name": ""
+                function (data) {
+                    $scope.products = data;
+                    $scope.products.unshift({
+                        'id': "",
+                        "name": ""
+                    });
+                    $scope.addRow();
                 });
-                $scope.addRow();
-            });
-           
+
             $scope.readonly = false;
 
         }
-
-      
 
         $scope.removeRow = function (index) {
             $scope.formData.raw_materials.splice(index, 1);
@@ -128,20 +126,20 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             })
         }
 
-        $scope.submitApproveReject=function(obj){
-            var raw_material = _.map(obj.raw_materials,function(n){
+        $scope.submitApproveReject = function (obj) {
+            var raw_material = _.map(obj.raw_materials, function (n) {
                 return {
-                    "raw_material_id":n.raw_material_id,
-                    "status":n.status
+                    "raw_material_id": n.raw_material_id,
+                    "status": n.status
                 }
             });
-            var saveObj={
-                "type":"partial",
-                "purchase_order_id":obj.purchase_order_id,
-                "raw_materials":raw_material
+            var saveObj = {
+                "type": "partial",
+                "purchase_order_id": obj.purchase_order_id,
+                "raw_materials": raw_material
             }
             console.log(saveObj);
-            NavigationService.approveDecline('/purchase_request/approve',saveObj,function(data){
+            NavigationService.approveDecline('/purchase_request/approve', saveObj, function (data) {
                 console.log(data);
             })
         };
@@ -222,9 +220,140 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
         }
 
-      
 
 
 
+
+
+    })
+
+    .controller('StoreRoomEntryCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("storeroomentry");
+        $scope.menutitle = NavigationService.makeactive("Store Room Entry");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        $scope.formData = {};
+        $scope.formData.page = 1;
+        $scope.formData.type = '';
+        $scope.formData.keyword = '';
+
+        $scope.formData.stock = [{
+            "name": "pratik patel",
+            "type": "by-product",
+            "quantity": "12"
+        }, {
+            "name": "Vishal Singh",
+            "type": "raw_material",
+            "quantity": "22"
+        }, {
+            "name": "Abhishek",
+            "type": "qwerty",
+            "quantity": "12"
+        }, {
+            "name": "Ashish Raina",
+            "type": "by-product",
+            "quantity": "134"
+        }];
+    })
+
+    .controller('StoreRoomCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("storeroom");
+        $scope.menutitle = NavigationService.makeactive("Store Room");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        $scope.formData = {};
+        $scope.formData.page = 1;
+        $scope.formData.type = '';
+        $scope.formData.keyword = '';
+
+        $scope.filterKeys = ["name", "desc", "minQty", "qtyAvail", "loc", "type"];
+
+        $scope.search = "";
+
+
+        $scope.formData.stock = [{
+            "name": "pratik patel",
+            "desc": "pratik patel wohlig",
+            "minQty": 10,
+            "qtyAvail": 20,
+            "loc": "Sion",
+            "type": "by-product"
+        }, {
+            "name": "Vishal Singh",
+            "desc": "Vishal Singh Barcleys",
+            "minQty": 20,
+            "qtyAvail": 40,
+            "loc": "Pune",
+            "type": "raw_material"
+        }, {
+            "name": "Abhishek",
+            "desc": "Abhishek Zeus",
+            "minQty": 10,
+            "qtyAvail": 20,
+            "loc": "Vichroli",
+            "type": "qwerty"
+        }, {
+            "name": "Ashish Raina",
+            "desc": "Ashish Raina Net Magic",
+            "minQty": 10,
+            "qtyAvail": 20,
+            "loc": "Kamothe",
+            "type": "by-product"
+        }];
+    })
+
+    .controller('RequestRawMaterialCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("createproduct");
+        $scope.menutitle = NavigationService.makeactive("Req Raw Materials");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        $scope.formData = {
+            "raw_materials": []
+        };
+
+        NavigationService.getReqNo('//', function (data) {
+            $scope.formData.reqNo = data;
+        })
+
+
+        $scope.addRow = function () {
+            var obj = {
+                "raw_material_id": "",
+                "raw_material_name": "",
+                "raw_material_desc": "",
+                "raw_material_quality": "",
+                "raw_material_qty": "",
+                "raw_material_unit": "",
+                "raw_material_rate": "",
+                "raw_material_amt": "",
+                "totalAmt": "",
+                "raw_material": {
+                    "raw_material_id": "",
+                    "raw_material_name": ""
+                },
+                "products": _.cloneDeep($scope.products)
+            }
+            $scope.formData.raw_materials.push(obj);
+        };
+
+        $scope.removeRow = function (index) {
+            $scope.formData.raw_materials.splice(index, 1);
+        }
+
+        NavigationService.getAllRaw_materials('/raw_materials/getAll', $scope.data,
+            function (data) {
+                $scope.products = data;
+                $scope.products.unshift({
+                    'id': "",
+                    "name": ""
+                });
+                $scope.addRow();
+            });
 
     });

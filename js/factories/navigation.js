@@ -11,6 +11,21 @@ myApp.factory('NavigationService', function ($http) {
             classis: "activeColor",
             sref: "#/purchaseorder",
             icon: "phone"
+        },{
+            name: "Store Room Entry",
+            classis: "activeColor",
+            sref: "#/storeroomentry",
+            icon: "phone"
+        },{
+            name: "Store Room",
+            classis: "activeColor",
+            sref: "#/storeroom",
+            icon: "phone"
+        },{
+            name: "Req Raw Materials",
+            classis: "activeColor",
+            sref: "#/requestrawmaterial",
+            icon: "phone"
         }
     ];
 
@@ -133,6 +148,26 @@ myApp.factory('NavigationService', function ($http) {
             });
         },
 
+        save: function(url,data,callback){
+            $http({
+                method: "POST",
+                url: adminurl + url,
+                data: data
+            }).then(function (data) {
+                callback(data.data);
+            });
+        },
+
+        getReqNo:function(url,callback){
+            // $http({
+            //     method: "POST",
+            //     url: adminurl + url,
+            //     data: data
+            // }).then(function (data) {
+            //     callback(121);
+            // });
+            callback(121);
+        }
        
     };
 });

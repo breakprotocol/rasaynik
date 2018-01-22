@@ -38,12 +38,29 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
         })
 
          //purchaase order
-         .state('purchase-order', {
+        .state('purchase-order', {
             url: "/purchaseorder",
             templateUrl: "views/template.html",
             controller: 'PurchaseOrderCtrl'
         })
-      
+
+        .state('store-room-entry', {
+            url: "/storeroomentry",
+            templateUrl: "views/template.html",
+            controller: 'StoreRoomEntryCtrl'
+        })
+
+        .state('store-room', {
+            url: "/storeroom",
+            templateUrl: "views/template.html",
+            controller: 'StoreRoomCtrl'
+        })
+
+        .state('request-raw-material', {
+            url: "/requestrawmaterial",
+            templateUrl: "views/template.html",
+            controller: 'RequestRawMaterialCtrl'
+        })    
       
         //sports
        

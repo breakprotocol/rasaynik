@@ -1,0 +1,108 @@
+<div class="heading-sec">
+    <div class="row">
+        <div class="col-md-4 column">
+            <div class="heading-profile">
+                <h2>Store Room</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TABLE  -->
+<div class=" panel-content ">
+    <div class="row ">
+        <div class="col-md-12 ">
+            <div class="widget ">
+                <div class="table-area ">
+                    <div class="widget-title ">
+                        <div class="pull-right">
+                            <form class="search-form mr-form ">
+                                <input type="text" placeholder="Search Here..." ng-model="search" />
+                            </form>
+                        </div>
+                        <h3>Store Room
+                            <span class="tableTotal">(Total : {{totalItems}}) </span>
+                        </h3>
+
+                        <!-- Filters:
+                        <div class="select-box">
+                            <ui-select ng-model="filterBy" theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;" title="Choose a country"
+                                append-to-body="true">
+                                <ui-select-match placeholder="Select or search a country in the list...">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="type in filterKeys | filter: $select.search">
+                                    <span ng-bind-html="type | highlight: $select.search"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <input type="text" ng-model=""> -->
+                    </div>
+                    <div class="table-responsive">
+                        <!--<div class="table-responsive " ng-show="totalItems>0 ">-->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Description
+                                    </th>
+                                    <th>
+                                        Mininum Quantity
+                                    </th>
+                                    <th>
+                                        Quantity Available
+                                    </th>
+                                    <th>
+                                        Location
+                                    </th>
+                                    <th>
+                                        Type
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- ng-repeat="item in formData.raw_materials track by $index" -->
+                                <tr ng-repeat="item in formData.stock | filter:search track by $index ">
+                                    <!--<tr>-->
+                                    <!-- for pagination -->
+                                    <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
+                                    <td>{{$index + 1}}</td>
+
+
+                                    <td>
+                                        {{item.name}}
+                                    </td>
+                                    <td>
+                                        {{item.desc}}
+                                    </td>
+                                    <td>
+                                        {{item.minQty}}
+                                    </td>
+                                    <td>
+                                        {{item.qtyAvail}}
+                                    </td>
+                                    <td>
+                                        {{item.loc}}
+                                    </td>
+                                    <td>
+                                        {{item.type}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tableData ">
+                        <input type="button" class="btn btn-success pull-right" ng-click="addRow()" value="Add" ng-if="view">
+                        </input>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- TABLE  END -->
