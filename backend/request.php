@@ -4,12 +4,12 @@ include 'connect.php';
 $url =  $_SERVER['PHP_SELF'];	
 $url = explode("/", $url);
 
-if(isset($url[4]))
-$service = $url[4];
-
-
 if(isset($url[5]))
-$method = $url[5];
+$service = $url[5];
+
+
+if(isset($url[6]))
+$method = $url[6];
 
 
 $data = file_get_contents('php://input');
@@ -228,7 +228,23 @@ function purchase_request($method,$mysqli,$data)
 				$stmt->bind_param('s', $data['purchase_order_id']);
 				$result = $stmt->execute();
 			}
-			echo $result;
+			 if($result)
+			 {
+			 	$stmt = $mysqli->prepare('SELECT raw_material_id from purchase_request_raw_materials where purchase_order_id =?');
+			 	$stmt->bind_param('s',$data['purchase_order_id']);
+			 	$stmt->execute();
+				$result = $stmt->get_result();
+				$raw_material_entry_data = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+				json_encode($raw_material_entry_data);
+				foreach ($raw_material_entry_data as $key => $value) {
+					$raw_material_id = $value['raw_material_id'];
+					INSERT_STORE_ROOM_ENTRY("raw_materials",$raw_material_id,$purchase_order_id,$mysqli);
+				}
+			}
+			 else
+			 {
+			 	echo "Issue while approving";
+			 }
 		}
 		else if($data['type']=="partial")
 		{
@@ -242,13 +258,22 @@ function purchase_request($method,$mysqli,$data)
 				$raw_materials = $data['raw_materials'];
 
 				foreach ($raw_materials as $key => $value) {
+					
 					$raw_material_id = $value['raw_material_id'];
 					$status = $value['status'];
-					echo $raw_material_id;
+					
 					$stmt = $mysqli->prepare('UPDATE purchase_request_raw_materials SET status = ? WHERE purchase_order_id = ? and raw_material_id = ?');
 					$stmt->bind_param('sss', $status,$purchase_order_id,$raw_material_id);
 					$result = $stmt->execute();
-					echo $result;
+					
+					if($result)
+					{
+						if($status == 'approve')
+						{
+							
+							INSERT_STORE_ROOM_ENTRY("raw_materials",$raw_material_id,$purchase_order_id,$mysqli);
+						}
+					}
 				}
 
 		}
@@ -275,9 +300,55 @@ function purchase_request($method,$mysqli,$data)
 	
 	}
 
+	// function INSERT_STORE_ROOM_ENTRY($type,$entry_data)
+	// {
+	// 	echo "hey";
+	// 	if($type == "raw_materials")
+	// 	{	
+	// 		echo "raw_materials" ;
+			
+	// 	}
+	// }
+
 	
 
 }
+function INSERT_STORE_ROOM_ENTRY($type,$raw_material_id,$purchase_order_id,$mysqli)
+	{
+		
+		if($type == "raw_materials")
+		{	
+			
+			$stmt = $mysqli->prepare('SELECT * FROM purchase_request_raw_materials WHERE raw_material_id = ? and purchase_order_id = ?');
+			$stmt->bind_param('ss', $raw_material_id,$purchase_order_id);
+			$stmt->execute();
+			$result = $stmt->get_result();
+			$entry_data = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+			json_encode($entry_data);
+			$name = $entry_data[0]['raw_material_name'];
+			$description = $entry_data[0]['raw_material_desc'];
+			$quantity = $entry_data[0]['raw_material_qty'];
+			$type = "raw_materials";
+			$quality = $entry_data[0]['raw_material_quality'];
+			$unit = $entry_data[0]['raw_material_unit'];
+			$source_id = $entry_data[0]['purchase_order_id'];
+				
+		}
+		
+		$stmt = $mysqli->prepare('INSERT INTO store_room_entry(name,description,quantity,type,quality,source_id,unit) values (?,?,?,?,?,?,?)');
+		$stmt->bind_param('sssssss',$name,$description,$quantity,$type,$quality,$source_id,$unit);
+		$result = $stmt->execute();
+		if($result)
+		{
+			echo "1";
+		}
+		else
+		{
+			echo "Some issue while inserting in entry point of store room";
+		}
+
+	}
+
 
 function product_request($method,$mysqli,$data)
 {	
