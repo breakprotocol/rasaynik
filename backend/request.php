@@ -28,15 +28,203 @@ switch($service)
 	raw_materials($method,$mysqli,$data);
 	break;
 
-	case "upload":
-	uploadImage($method,$mysqli,$data);
+	case "store_room_entry":
+	store_room_entry($method,$mysqli,$data);
 	break;
 
+
+	case "store_room":
+	store_room_entry($method,$mysqli,$data);
+	break;
+	
 	default :
 	echo "Don't do this";
 	break;
 }
 
+
+function store_room($method,$mysqli,$data)
+{
+		$data = json_decode($data,true);
+
+	if($method=="getCount")
+	{
+	// Find out how many items are in the table
+		$query = "SELECT COUNT(*) FROM store_room";
+    	$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
+		$row =  $result->fetch_row();
+		$total =  $row[0];
+		echo $total;		
+	}
+	if ($method=="getAll")
+	{
+
+	 // Find out how many items are in the table
+		$query = "SELECT COUNT(*) FROM store_room";
+    	$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
+		$row =  $result->fetch_row();
+		$total =  $row[0];
+    // How many items to list per page
+    	$limit = 10;
+
+    // How many pages will there be
+    	$pages = ceil($total / $limit);
+	// What page are we currently on?
+    	$page = $data['page'];
+
+    // Calculate the offset for the query
+    	$offset = ($page - 1)  * $limit;
+
+
+
+
+		$stmt=$mysqli->prepare('SELECT * from store_room order by id limit ? offset ?');
+		$stmt->bind_param('ss', $limit,$offset);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$store_room = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+	//	$purchase_order = json_encode($json );
+
+		// foreach ($purchase_order as $key => $value) {
+		// $stmt=$mysqli->prepare('SELECT * from purchase_request_raw_materials where purchase_order_id = ?');
+		// $stmt->bind_param('s', $value['purchase_order_id']);
+		// $stmt->execute();
+		// $result = $stmt->get_result();
+		// $raw_material_json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+		// }
+		// $purchase_order['raw_materials'] = $raw_material_json;
+		echo json_encode($store_room) ;
+	}
+
+}
+
+function store_room_entry($method,$mysqli,$data)
+{
+
+	$data = json_decode($data,true);
+
+	if($method=="getCount")
+	{
+	// Find out how many items are in the table
+		$query = "SELECT COUNT(*) FROM store_room_entry";
+    	$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
+		$row =  $result->fetch_row();
+		$total =  $row[0];
+		echo $total;		
+	}
+	if ($method=="getAll")
+	{
+
+	 // Find out how many items are in the table
+		$query = "SELECT COUNT(*) FROM store_room_entry";
+    	$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
+		$row =  $result->fetch_row();
+		$total =  $row[0];
+    // How many items to list per page
+    	$limit = 10;
+
+    // How many pages will there be
+    	$pages = ceil($total / $limit);
+	// What page are we currently on?
+    	$page = $data['page'];
+
+    // Calculate the offset for the query
+    	$offset = ($page - 1)  * $limit;
+
+
+
+
+		$stmt=$mysqli->prepare('SELECT * from store_room_entry order by id limit ? offset ?');
+		$stmt->bind_param('ss', $limit,$offset);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$store_room_entry = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+	//	$purchase_order = json_encode($json );
+
+		// foreach ($purchase_order as $key => $value) {
+		// $stmt=$mysqli->prepare('SELECT * from purchase_request_raw_materials where purchase_order_id = ?');
+		// $stmt->bind_param('s', $value['purchase_order_id']);
+		// $stmt->execute();
+		// $result = $stmt->get_result();
+		// $raw_material_json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+		// }
+		// $purchase_order['raw_materials'] = $raw_material_json;
+		echo json_encode($store_room_entry) ;
+	}
+
+	if($method=="decline")
+	{
+		
+		
+			$store_room_entry_id = $data['store_room_entry_id'];
+			$stmt = $mysqli->prepare('UPDATE store_room_entry SET status = "Rejected" WHERE store_room_entry.id = ?');
+			$stmt->bind_param('s', $data['store_room_entry_id']);
+			$result = $stmt->execute();
+
+			echo $result;
+		
+	
+	}
+		if($method=="accept")
+	{
+		
+		
+			$store_room_entry_id = $data['store_room_entry_id'];
+			$stmt = $mysqli->prepare('UPDATE store_room_entry SET status = "Complete" WHERE store_room_entry.id = ?');
+			$stmt->bind_param('s', $data['store_room_entry_id']);
+			$result = $stmt->execute();
+
+			if($result)
+			{
+
+				$stmt = $mysqli->prepare('SELECT * from store_room_entry where id =?');
+			 	$stmt->bind_param('s',$store_room_entry_id);
+			 	$stmt->execute();
+				echo $result;
+				$result = $stmt->get_result();
+				$store_room_entry_data = mysqli_fetch_all($result, MYSQLI_ASSOC);
+				echo json_encode($store_room_entry_data);
+				$name = $store_room_entry_data[0]['name'];
+				$description = $store_room_entry_data[0]['description'];
+				$quantity = $store_room_entry_data[0]['quantity'];
+				$type = $store_room_entry_data[0]['type'];
+				$quality = $store_room_entry_data[0]['quality'];
+				$unit = $store_room_entry_data[0]['unit'];
+				$current_timestamp = date("Y-m-d H:i:s"); 
+
+				$stmt = $mysqli->prepare('SELECT * from store_room where source_id =?');
+			 	$stmt->bind_param('s',$store_room_entry_id);
+			 	$stmt->execute();
+				$result = $stmt->get_result();
+				$store_room_data = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+				echo json_encode($store_room_data);
+				if($store_room_data)
+				{
+					$store_room_data_id = $store_room_data[0]['id'];
+					$quantity_tobe_updated = $store_room_data[0]['quantity'] + $store_room_entry_data[0]['quantity'];
+					
+
+					$stmt = $mysqli->prepare('UPDATE store_room SET quantity = ? and last_modified = ? WHERE store_room.id = ?');
+					$stmt->bind_param('sss', $quantity_tobe_updated,$current_timestamp,$store_room_data_id);
+					$result = $stmt->execute();	
+					echo $result;
+
+				}
+				else
+				{
+						$stmt = $mysqli->prepare('INSERT INTO store_room(quantity,entry_date,last_modified,name,description,unit,type) VALUES (?, ?, ?, ?, ?, ?, ?)');
+						$stmt->bind_param('sssssss', $quantity,$current_timestamp,$current_timestamp,$name,$description,$unit,$type);
+						$result = $stmt->execute();		
+						echo $result;
+					
+				}
+				
+	
+	}
+
+
+}
+}
 
 function purchase_request($method,$mysqli,$data)
 {	

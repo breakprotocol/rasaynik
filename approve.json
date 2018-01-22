@@ -24,3 +24,52 @@ data
 {"purchase_order_id":"101"}
 
 url: http://localhost/rasaynik/backend/request.php/purchase_request/getOne
+
+
+getAll (for store room entry)
+
+data
+{"page":1}
+
+url : http://localhost/rasaynik1/rasaynik/backend/request.php/store_room_entry/getAll
+
+
+getCount (for store room entry)
+
+data
+{}
+
+url:
+http://localhost/rasaynik1/rasaynik/backend/request.php/store_room_entry/getCount
+
+reject (for store room entry)
+
+data:
+{"store_room_entry_id":6}
+url:
+http://localhost/rasaynik1/rasaynik/backend/request.php/store_room_entry/decline
+
+complete (for store room entry)
+
+data:
+{"store_room_entry_id":6}
+url:
+http://localhost/rasaynik1/rasaynik/backend/request.php/store_room_entry/accept
+
+
+getAll (for store room)
+
+data
+{"page":1}
+
+url : http://localhost/rasaynik1/rasaynik/backend/request.php/store_room/getAll
+
+
+getCount (for store room )
+
+data
+{}
+
+url:
+http://localhost/rasaynik1/rasaynik/backend/request.php/store_room/getCount
+
