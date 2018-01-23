@@ -26,6 +26,11 @@ myApp.factory('NavigationService', function ($http) {
             classis: "activeColor",
             sref: "#/requestrawmaterial",
             icon: "phone"
+        },{
+            name: "Products",
+            classis: "activeColor",
+            sref: "#/products",
+            icon: "phone"
         }
     ];
 
@@ -134,7 +139,6 @@ myApp.factory('NavigationService', function ($http) {
             $http.post(adminurl + url, formData).then(function (data) {
                 data = data.data;
                 callback(data);
-
             });
         },
 

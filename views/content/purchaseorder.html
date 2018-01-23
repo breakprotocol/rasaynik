@@ -46,11 +46,11 @@
                 </thead>
                 <tbody>
                   <!--<tr ng-repeat="item in items">-->
-                  <tr ng-repeat="item in formData track by $index">
+                  <tr ng-repeat="item in items track by $index">
                     <!--<tr>-->
                     <!-- for pagination -->
                     <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
-                    <td>{{$index + 1}}</td>
+                    <td>{{((formData.page-1) * 10) + $index + 1}} </td>
   
                     <td>
                       <!-- <ui-select multiple tagging="tagTransform" ng-model="item.name" theme="bootstrap"  style="width: 300px;" title="Choose a person">
@@ -84,11 +84,11 @@
             <div class="tableData " ng-show="totalItems===0 ">
                 <h5>No data found</h5>
               </div>
-              <!-- <div class="tableData " ng-show="totalItems===undefined ">
+              <div class="tableData " ng-show="totalItems===undefined ">
                 <h5>Loading Data</h5>
-              </div> -->
-              <ul ng-if="totalItems" ng-change="viewTable()" uib-pagination total-items="totalItems" items-per-page="10" ng-model="formData.page"
-                max-size="template.pageMax" class="pagination-sm" boundary-links="true" force-ellipses="true"></ul>
+              </div>
+              <ul uib-pagination ng-if="totalItems" ng-change="viewTable()"  total-items="totalItems" items-per-page="10" ng-model="formData.page"  class="pagination-sm"
+                max-size="10" boundary-links="true" force-ellipses="true">{{page.number}}</ul>
             </div>
           </div>
         </div>

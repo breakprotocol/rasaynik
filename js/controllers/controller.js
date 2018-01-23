@@ -157,37 +157,22 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.formData.type = '';
         $scope.formData.keyword = '';
 
+        NavigationService.getCount('/purchase_request/getCount', function (data) {
+            $scope.totalItems = data;
+        });
+
         $scope.viewTable = function () {
 
             $scope.url = "/purchase_request/getAll";
             // $scope.search = $scope.formData.keyword;
             $scope.formData.page = $scope.formData.page++;
             NavigationService.apiCall($scope.url, $scope.formData, function (data) {
-                $scope.formData = data
+                $scope.items = data
             });
         }
         $scope.viewTable();
 
-        // NavigationService.getAllPO('/purchase_request/getAll', {
-        //     "page": 1
-        // }, function (data) {
-        //     $scope.formData = data;
-        // });
-
-        NavigationService.getCount('/purchase_request/getCount', function (data) {
-            $scope.totalItems = data;
-        });
-
-        $scope.viewTable = function () {
-            var pagenumber = {
-                "page": $scope.formData.page++
-            };
-            NavigationService.getAllPO('/purchase_request/getAll', pagenumber, function (data) {
-                $scope.formData = data;
-            });
-        };
-
-
+     
 
         // credentials--0 for PO Department
         // credentials--1 for admin 
@@ -239,23 +224,75 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.formData.type = '';
         $scope.formData.keyword = '';
 
-        $scope.formData.stock = [{
+        NavigationService.getCount('/store_room_entry/getCount', function (data) {
+            $scope.totalItems = data;
+        });
+
+        $scope.searchInTable = function (data) {
+            $scope.formData.page = 1;
+            if (data.length >= 2) {
+                $scope.formData.keyword = data;
+                $scope.viewTable();
+            } else if (data.length == '') {
+                $scope.formData.keyword = data;
+                $scope.viewTable();
+            }
+        }
+        $scope.viewTable = function () {
+
+            $scope.url = "/store_room_entry/getAll";
+            // $scope.search = $scope.formData.keyword;
+            $scope.formData.page = $scope.formData.page++;
+            NavigationService.apiCall($scope.url, $scope.formData, function (data) {
+                console.log("data.value", data);
+                $scope.items = data.data;
+            });
+        }
+        $scope.viewTable();
+
+        $scope.items = [{
+            "store_room_entry_id":1,
             "name": "pratik patel",
             "type": "by-product",
             "quantity": "12"
         }, {
+            "store_room_entry_id":2,
             "name": "Vishal Singh",
             "type": "raw_material",
             "quantity": "22"
         }, {
+            "store_room_entry_id":3,
             "name": "Abhishek",
             "type": "qwerty",
             "quantity": "12"
         }, {
+            "store_room_entry_id":4,
             "name": "Ashish Raina",
             "type": "by-product",
             "quantity": "134"
         }];
+
+        $scope.approveDecline=function(obj,flag){
+            var sendObj ={
+                "store_room_entry_id":item.store_room_entry_id
+            }
+            var url = "";
+            if(flag==1){
+                url = "/store_room_entry/accept";
+            }else if(flag==0){
+                url = "/store_room_entry/decline"                
+            }
+
+            NavigationService.approveDecline(url, sendObj, function(data){
+                console.log(data);
+                if(flag==1){
+                   item.status="approve";
+                }else if(flag==0){
+                   item.status="reject";
+                }
+            });
+
+        }
     })
 
     .controller('StoreRoomCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
@@ -267,43 +304,105 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
         $scope.formData = {};
         $scope.formData.page = 1;
-        $scope.formData.type = '';
-        $scope.formData.keyword = '';
 
         $scope.filterKeys = ["name", "desc", "minQty", "qtyAvail", "loc", "type"];
 
         $scope.search = "";
 
+        NavigationService.getCount('/store_room/getCount', function (data) {
+            $scope.totalItems = data;
+        });
 
-        $scope.formData.stock = [{
-            "name": "pratik patel",
-            "desc": "pratik patel wohlig",
-            "minQty": 10,
-            "qtyAvail": 20,
-            "loc": "Sion",
-            "type": "by-product"
-        }, {
-            "name": "Vishal Singh",
-            "desc": "Vishal Singh Barcleys",
-            "minQty": 20,
-            "qtyAvail": 40,
-            "loc": "Pune",
-            "type": "raw_material"
-        }, {
-            "name": "Abhishek",
-            "desc": "Abhishek Zeus",
-            "minQty": 10,
-            "qtyAvail": 20,
-            "loc": "Vichroli",
-            "type": "qwerty"
-        }, {
-            "name": "Ashish Raina",
-            "desc": "Ashish Raina Net Magic",
-            "minQty": 10,
-            "qtyAvail": 20,
-            "loc": "Kamothe",
-            "type": "by-product"
-        }];
+        $scope.searchInTable = function (data) {
+            $scope.formData.page = 1;
+            if (data.length >= 2) {
+                $scope.formData.keyword = data;
+                $scope.viewTable();
+            } else if (data.length == '') {
+                $scope.formData.keyword = data;
+                $scope.viewTable();
+            }
+        }
+        $scope.viewTable = function () {
+
+            $scope.url = "/store_room/getAll";
+            // $scope.search = $scope.formData.keyword;
+            $scope.formData.page = $scope.formData.page++;
+            NavigationService.apiCall($scope.url, $scope.formData, function (data) {
+                console.log("data.value", data);
+                $scope.items = data.data;
+            });
+        }
+        $scope.viewTable();
+
+
+        // $scope.formData.stock = [{
+        //     "name": "pratik patel",
+        //     "desc": "pratik patel wohlig",
+        //     "minQty": 10,
+        //     "qtyAvail": 20,
+        //     "loc": "Sion",
+        //     "type": "by-product"
+        // }, {
+        //     "name": "Vishal Singh",
+        //     "desc": "Vishal Singh Barcleys",
+        //     "minQty": 20,
+        //     "qtyAvail": 40,
+        //     "loc": "Pune",
+        //     "type": "raw_material"
+        // }, {
+        //     "name": "Abhishek",
+        //     "desc": "Abhishek Zeus",
+        //     "minQty": 10,
+        //     "qtyAvail": 20,
+        //     "loc": "Vichroli",
+        //     "type": "qwerty"
+        // }, {
+        //     "name": "Ashish Raina",
+        //     "desc": "Ashish Raina Net Magic",
+        //     "minQty": 10,
+        //     "qtyAvail": 20,
+        //     "loc": "Kamothe",
+        //     "type": "by-product"
+        // }];
+    })
+
+    .controller('ProductsCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.template = TemplateService.changecontent("products");
+        $scope.menutitle = NavigationService.makeactive("Products");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        $scope.formData = {};
+        $scope.formData.page = 1;
+
+        $scope.filterKeys = ["name", "desc", "minQty", "qtyAvail", "loc", "type"];
+
+        $scope.search = "";
+
+        $scope.searchInTable = function (data) {
+            $scope.formData.page = 1;
+            if (data.length >= 2) {
+                $scope.formData.keyword = data;
+                $scope.viewTable();
+            } else if (data.length == '') {
+                $scope.formData.keyword = data;
+                $scope.viewTable();
+            }
+        }
+
+        $scope.viewTable = function () {
+
+            $scope.url = "/store_room_entry/getAll";
+            // $scope.search = $scope.formData.keyword;
+            $scope.formData.page = $scope.formData.page++;
+            NavigationService.apiCall($scope.url, $scope.formData, function (data) {
+                console.log("data.value", data);
+                $scope.items = data.data;
+            });
+        }
+        $scope.viewTable();
     })
 
     .controller('RequestRawMaterialCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {

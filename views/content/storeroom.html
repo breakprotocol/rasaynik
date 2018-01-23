@@ -64,7 +64,7 @@
                             </thead>
                             <tbody>
                                 <!-- ng-repeat="item in formData.raw_materials track by $index" -->
-                                <tr ng-repeat="item in formData.stock | filter:search track by $index ">
+                                <tr ng-repeat="item in items | filter:search track by $index ">
                                     <!--<tr>-->
                                     <!-- for pagination -->
                                     <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
@@ -94,9 +94,14 @@
                         </table>
                     </div>
 
-                    <div class="tableData ">
-                        <input type="button" class="btn btn-success pull-right" ng-click="addRow()" value="Add" ng-if="view">
-                        </input>
+                    <div class="tableData " ng-show="totalItems===0 ">
+                        <h5>No data found</h5>
+                      </div>
+                      <div class="tableData " ng-show="totalItems===undefined ">
+                        <h5>Loading Data</h5>
+                      </div>
+                      <ul ng-if="totalItems" ng-change="viewTable();" uib-pagination total-items="totalItems" items-per-page="maxRow" ng-model="formData.page"
+                        max-size="template.pageMax" class="pagination-sm" boundary-links="true " force-ellipses="true "></ul>
                     </div>
                     <div>
                     </div>
