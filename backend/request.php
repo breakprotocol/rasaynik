@@ -4,12 +4,14 @@ include 'connect.php';
 $url =  $_SERVER['PHP_SELF'];	
 $url = explode("/", $url);
 
-if(isset($url[4]))
-$service = $url[4];
-
-
 if(isset($url[5]))
-$method = $url[5];
+$service = $url[5];
+
+
+if(isset($url[6]))
+$method = $url[6];
+
+
 
 
 $data = file_get_contents('php://input');
@@ -33,11 +35,11 @@ switch($service)
 
 
 	case "store_room":
-	store_room_entry($method,$mysqli,$data);
+	store_room($method,$mysqli,$data);
 	break;
 	
 	default :
-	echo "Don't do this";
+	echo "Don do this";
 	break;
 }
 
@@ -183,6 +185,7 @@ function store_room_entry($method,$mysqli,$data)
 				$result = $stmt->get_result();
 				$store_room_entry_data = mysqli_fetch_all($result, MYSQLI_ASSOC);
 				echo json_encode($store_room_entry_data);
+				$source_id = $store_room_entry_data[0]['source_id'];
 				$name = $store_room_entry_data[0]['name'];
 				$description = $store_room_entry_data[0]['description'];
 				$quantity = $store_room_entry_data[0]['quantity'];
@@ -192,27 +195,33 @@ function store_room_entry($method,$mysqli,$data)
 				$current_timestamp = date("Y-m-d H:i:s"); 
 
 				$stmt = $mysqli->prepare('SELECT * from store_room where source_id =?');
-			 	$stmt->bind_param('s',$store_room_entry_id);
+			 	$stmt->bind_param('s',$source_id);
 			 	$stmt->execute();
 				$result = $stmt->get_result();
 				$store_room_data = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+				echo("hey");
+				echo($store_room_entry_id);
 				echo json_encode($store_room_data);
 				if($store_room_data)
 				{
+					echo("ssup");
 					$store_room_data_id = $store_room_data[0]['id'];
-					$quantity_tobe_updated = $store_room_data[0]['quantity'] + $store_room_entry_data[0]['quantity'];
+					echo($store_room_data_id);
 					
+					$quantity_tobe_updated = $store_room_data[0]['quantity'] + $store_room_entry_data[0]['quantity'];
+					echo("fo");
+					echo($quantity_tobe_updated);
 
-					$stmt = $mysqli->prepare('UPDATE store_room SET quantity = ? and last_modified = ? WHERE store_room.id = ?');
-					$stmt->bind_param('sss', $quantity_tobe_updated,$current_timestamp,$store_room_data_id);
+					$stmt = $mysqli->prepare('UPDATE store_room SET quantity = ? WHERE id = ?');
+					$stmt->bind_param('ss', $quantity_tobe_updated,$store_room_data_id);
 					$result = $stmt->execute();	
 					echo $result;
 
 				}
 				else
 				{
-						$stmt = $mysqli->prepare('INSERT INTO store_room(quantity,entry_date,last_modified,name,description,unit,type) VALUES (?, ?, ?, ?, ?, ?, ?)');
-						$stmt->bind_param('sssssss', $quantity,$current_timestamp,$current_timestamp,$name,$description,$unit,$type);
+						$stmt = $mysqli->prepare('INSERT INTO store_room(quantity,entry_date,last_modified,name,description,unit,type,source_id) VALUES (?, ?, ?, ?, ?, ?, ?, ?)');
+						$stmt->bind_param('ssssssss', $quantity,$current_timestamp,$current_timestamp,$name,$description,$unit,$type,$source_id);
 						$result = $stmt->execute();		
 						echo $result;
 					
@@ -518,7 +527,7 @@ function INSERT_STORE_ROOM_ENTRY($type,$raw_material_id,$purchase_order_id,$mysq
 			$type = "raw_materials";
 			$quality = $entry_data[0]['raw_material_quality'];
 			$unit = $entry_data[0]['raw_material_unit'];
-			$source_id = $entry_data[0]['purchase_order_id'];
+			$source_id = $entry_data[0]['raw_material_id'];
 				
 		}
 		

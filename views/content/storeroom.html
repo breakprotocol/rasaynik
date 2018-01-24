@@ -63,6 +63,7 @@
                                 </tr>
                             </thead>
                             <tbody>
+                            
                                 <!-- ng-repeat="item in formData.raw_materials track by $index" -->
                                 <tr ng-repeat="item in items | filter:search track by $index ">
                                     <!--<tr>-->
@@ -75,16 +76,16 @@
                                         {{item.name}}
                                     </td>
                                     <td>
-                                        {{item.desc}}
+                                        {{item.description}}
                                     </td>
                                     <td>
-                                        {{item.minQty}}
+                                        {{item.quantity}}
                                     </td>
                                     <td>
-                                        {{item.qtyAvail}}
+                                        {{item.quantity}}
                                     </td>
                                     <td>
-                                        {{item.loc}}
+                                        {{item.location}}
                                     </td>
                                     <td>
                                         {{item.type}}

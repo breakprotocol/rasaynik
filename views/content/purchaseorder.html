@@ -67,6 +67,8 @@
                     <td ng-if="profile.credentials==0">
                           <i class="fa fa-thumbs-up success fa-2x" ng-if="item.status=='Complete'"></i>
                           <i class="fa fa-thumbs-down danger fa-2x" ng-if="item.status=='Rejected'"></i> 
+
+                          <i class="fa fa-clock-o fa-2x" ng-if="item.status=='Partial'"></i> 
                           <i class="fa fa-clock-o fa-2x" ng-if="!item.status"></i>
                       </td>
                     <td ng-if="profile.credentials==1">

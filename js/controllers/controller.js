@@ -178,7 +178,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // credentials--1 for admin 
         // change and see the dii=fference
         $.jStorage.set("profile", {
-            'credentials': 0
+            'credentials': 1
         });
         $scope.profile = $.jStorage.get("profile");
 
@@ -245,7 +245,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             $scope.formData.page = $scope.formData.page++;
             NavigationService.apiCall($scope.url, $scope.formData, function (data) {
                 console.log("data.value", data);
-                $scope.items = data.data;
+                $scope.items = data;
             });
         }
         $scope.viewTable();
@@ -273,8 +273,9 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         }];
 
         $scope.approveDecline=function(obj,flag){
+            console.log();
             var sendObj ={
-                "store_room_entry_id":item.store_room_entry_id
+                "store_room_entry_id":obj.id
             }
             var url = "";
             if(flag==1){
@@ -330,7 +331,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             $scope.formData.page = $scope.formData.page++;
             NavigationService.apiCall($scope.url, $scope.formData, function (data) {
                 console.log("data.value", data);
-                $scope.items = data.data;
+                $scope.items = data;
             });
         }
         $scope.viewTable();
