@@ -73,3 +73,21 @@ data
 url:
 http://localhost/rasaynik1/rasaynik/backend/request.php/store_room/getCount
 
+user login
+http://localhost/rasaynik1/rasaynik/backend/request.php/login/login
+data
+{"username":"vishal","password":"vishal"}
+
+user register
+{"username":"pratik","password":"pratik","access":1}
+
+
+Access Level
+0 - All Access
+1 - Purchase Order Create(PO guy)
+2 - Purchase Order Accept(QA guy)
+3 - Store room entry (Store room guy)
+4 - Request Raw materials(product create guy)
+Rest all pages should be viewable by everyone.
+
+

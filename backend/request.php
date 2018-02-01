@@ -38,9 +38,66 @@ switch($service)
 	store_room($method,$mysqli,$data);
 	break;
 	
+
+	case "login":
+	login($method,$mysqli,$data);
+	break;
+
+
 	default :
 	echo "Don do this";
 	break;
+}
+
+function login($method,$mysqli,$data)
+{
+	
+	$data = json_decode($data,true);
+
+
+	if($method=="login")
+	{
+		$username = $data['username'];
+		$password = $data['password'];
+		$stmt=$mysqli->prepare('SELECT * FROM user_details where user_name = ?');
+		$stmt->bind_param('s', $username);
+		$stmt->execute();
+		$result = $stmt->get_result();
+		if ($result->num_rows === 1)
+		{
+			$user_details = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+			json_encode($user_details);
+			if (password_verify($password, $user_details[0]['user_pass']))	
+				echo json_encode($user_details[0]['access_level']);
+			else
+				echo "Wrong Creds";
+		}
+		else
+		{
+			echo "Wrong Creds";
+		}
+		
+
+	}
+
+	if($method=="register")
+	{
+		$username = $data['username'];
+		$password = $data['password'];
+		$access = $data['access'];
+		$password_hash = password_hash($password,PASSWORD_DEFAULT);
+		$stmt = $mysqli->prepare('INSERT INTO user_details(user_name,user_pass,access_level) values (?, ?, ?)');
+				$stmt->bind_param('sss',$username,$password_hash,$access);
+				$result = $stmt->execute();
+				if($result)
+					echo $result;
+				else
+				{
+					echo "Theres some problem inserting the new raw material";
+					
+				}
+	}
+
 }
 
 
