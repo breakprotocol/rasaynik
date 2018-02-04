@@ -23,6 +23,10 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
     .controller('LoginCtrl', function ($scope, TemplateService, NavigationService,$uibModal,$state) {
         $scope.template = TemplateService;
         $scope.formData = {};
+        $scope.goRegister = function()
+        {
+            $state.go("register");
+        }
         $scope.login = function(formData){
             console.log(formData);
             NavigationService.login('/login/login',formData,function (data) {
@@ -31,6 +35,27 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             'credentials': data
         });
         $state.go("purchase-order");
+             });
+        }
+    })
+
+     .controller('RegisterCtrl', function ($scope, TemplateService, NavigationService,$uibModal,$state,$timeout) {
+        $scope.template = TemplateService;
+        $scope.formData = {};
+        $scope.register = function(formData){
+            console.log(formData);
+            NavigationService.register('/login/register',formData,function (data) {
+                console.log(data);
+            $.jStorage.set("profile", {
+            'credentials': data
+        }); 
+        $scope.successMessage = "User Registered successfully. Redirecting to login page";
+        $scope.successMessagebool = true;
+        $timeout(function() {
+            $state.go('login');
+        }, 3000);
+
+      //  $state.go("purchase-order");
              });
         }
     })

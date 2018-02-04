@@ -79,7 +79,11 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             templateUrl: "views/login.html",
             controller: 'LoginCtrl'
         })
-
+        .state('register', {
+            url: "/register",
+            templateUrl: "views/register.html",
+            controller: 'RegisterCtrl'
+        })
         
         .state('schema-creator', {
             url: "/schema-creator",
