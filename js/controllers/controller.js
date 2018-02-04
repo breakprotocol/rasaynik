@@ -20,10 +20,18 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         }
     })
 
-    .controller('LoginCtrl', function ($scope, TemplateService, $uibModal,$state) {
+    .controller('LoginCtrl', function ($scope, TemplateService, NavigationService,$uibModal,$state) {
         $scope.template = TemplateService;
+        $scope.formData = {};
         $scope.login = function(formData){
-            NavigationService.login();
+            console.log(formData);
+            NavigationService.login('/login/login',formData,function (data) {
+                console.log(data);
+            $.jStorage.set("profile", {
+            'credentials': data
+        });
+        $state.go("purchase-order");
+             });
         }
     })
 
@@ -189,9 +197,9 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // credentials--0 for PO Department
         // credentials--1 for admin 
         // change and see the dii=fference
-        $.jStorage.set("profile", {
-            'credentials': 0
-        });
+        // $.jStorage.set("profile", {
+        //     'credentials': 0
+        // });
         $scope.profile = $.jStorage.get("profile");
 
         $scope.approveDecline = function (flag, item) {

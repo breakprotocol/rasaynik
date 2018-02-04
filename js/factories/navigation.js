@@ -65,13 +65,13 @@ myApp.factory('NavigationService', function ($http) {
             });
         },
 
-        login:function(data,url, callback){
+        login:function(url,data,callback){
             $http({
                 method: "POST",
                 url: adminurl + url,
                 data: data
             }).then(function (data) {
-                console.log(data.data);
+                callback(data.data);
             });
         },
 
