@@ -65,6 +65,16 @@ myApp.factory('NavigationService', function ($http) {
             });
         },
 
+        login:function(data,url, callback){
+            $http({
+                method: "POST",
+                url: adminurl + url,
+                data: data
+            }).then(function (data) {
+                console.log(data.data);
+            });
+        },
+
         makeactive: function (menuname) {
             for (var i = 0; i < navigation.length; i++) {
                 if (navigation[i].name == menuname) {

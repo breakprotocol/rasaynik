@@ -20,7 +20,7 @@
                     <input type="text " ng-change="searchInTable(search) " placeholder="Search Here...
                                        " ng-model="search" />
                   </form> -->
-                <a class="btn btn-success" ng-if="profile.credentials==0" ui-sref="category">
+                <a class="btn btn-success" ng-if="profile.credentials==1 || profile.credentials==0" ui-sref="category">
                     Create
                 </a>
               </div>
@@ -41,7 +41,7 @@
                     
                       </th>
                     <th ng-if="profile.credentials==0">Status</th>
-                    <th ng-if="profile.credentials==1">Actions</th>
+                    <th ng-if="profile.credentials==2 || profile.credentials==0">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -71,7 +71,7 @@
                           <i class="fa fa-clock-o fa-2x" ng-if="item.status=='Partial'"></i> 
                           <i class="fa fa-clock-o fa-2x" ng-if="!item.status"></i>
                       </td>
-                    <td ng-if="profile.credentials==1">
+                    <td ng-if="profile.credentials==2 || profile.credentials==0">
                       <a class="btn" ng-class="{'btn-success':item.status=='Complete'}" ng-click="approveDecline(1,item)" >
                         <i class="fa fa-thumbs-up fa-2x"></i> 
                       </a>

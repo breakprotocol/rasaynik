@@ -7,12 +7,24 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.navigation = NavigationService.getnav();
     })
 
-    .controller('headerctrl', function ($scope, TemplateService, $uibModal) {
+    .controller('headerctrl', function ($scope, TemplateService, $uibModal,$state) {
         $scope.template = TemplateService;
         $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             $(window).scrollTop(0);
         });
 
+        var profile = $.jStorage.get("profile");
+
+        if(!profile){
+            $state.go('login')
+        }
+    })
+
+    .controller('LoginCtrl', function ($scope, TemplateService, $uibModal,$state) {
+        $scope.template = TemplateService;
+        $scope.login = function(formData){
+            NavigationService.login();
+        }
     })
 
     .controller('AccessController', function ($scope, TemplateService, NavigationService, $timeout, $state) {
@@ -178,7 +190,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // credentials--1 for admin 
         // change and see the dii=fference
         $.jStorage.set("profile", {
-            'credentials': 1
+            'credentials': 0
         });
         $scope.profile = $.jStorage.get("profile");
 
@@ -412,6 +424,8 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.menutitle = NavigationService.makeactive("Req Raw Materials");
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
+
+        $scope.profile = $.jStorage.get("profile");
 
         $scope.formData = {
             "raw_materials": []
