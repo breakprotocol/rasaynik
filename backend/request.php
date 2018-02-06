@@ -59,6 +59,7 @@ function login($method,$mysqli,$data)
 	{
 		$username = $data['username'];
 		$password = $data['password'];
+		$loginResponse = array();
 		$stmt=$mysqli->prepare('SELECT * FROM user_details where user_name = ?');
 		$stmt->bind_param('s', $username);
 		$stmt->execute();
@@ -67,14 +68,23 @@ function login($method,$mysqli,$data)
 		{
 			$user_details = mysqli_fetch_all ($result, MYSQLI_ASSOC);
 			json_encode($user_details);
-			if (password_verify($password, $user_details[0]['user_pass']))	
-				echo json_encode($user_details[0]['access_level']);
+			if (password_verify($password, $user_details[0]['user_pass']))
+			{	
+				json_encode($user_details[0]['access_level']);
+				$loginResponse = array('access' => $user_details[0]['access_level'],'success' => 'true');
+				echo json_encode($loginResponse);
+		}
 			else
-				echo "Wrong Creds";
+			{
+				$loginResponse = array('success' => 'false');
+				echo json_encode($loginResponse);
+			}	
+				
 		}
 		else
 		{
-			echo "Wrong Creds";
+			$loginResponse = array('success' => 'false');
+			echo json_encode($loginResponse);
 		}
 		
 
