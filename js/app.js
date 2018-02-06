@@ -21,7 +21,7 @@ var myApp = angular.module('myApp', [
 
 myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
     // for http request with session
-    $httpProvider.defaults.withCredentials = true;
+    $.jStorage.flush();
     $stateProvider
 
         .state('dashboard', {
@@ -45,7 +45,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
         })
 
         .state('store-room-entry', {
-            url: "/storeroomentry",
+            url: "/StoreRoomEntryCtrl",
             templateUrl: "views/template.html",
             controller: 'StoreRoomEntryCtrl'
         })

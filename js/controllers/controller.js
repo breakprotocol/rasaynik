@@ -21,6 +21,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
     })
 
     .controller('LoginCtrl', function ($scope, TemplateService, NavigationService,$uibModal,$state) {
+        $.jStorage.flush();
         $scope.template = TemplateService;
         $scope.formData = {};
         $scope.goRegister = function()
