@@ -53,6 +53,16 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
     })
 
      .controller('RegisterCtrl', function ($scope, TemplateService, NavigationService,$uibModal,$state,$timeout) {
+        $showRegisterbool = false;
+        $scope.successMessagebol = false;
+        // if($jStorage.get("profile"))
+        // {
+        //     console.log("error");
+        // }
+        if($scope.profile == 0)
+        {
+            $showRegisterbool = true;
+        }
         $scope.template = TemplateService;
         $scope.formData = {};
         $scope.register = function(formData){
@@ -63,7 +73,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             'credentials': data
         }); 
         $scope.successMessage = "User Registered successfully. Redirecting to login page";
-        $scope.successMessagebool = true;
+        $scope.successMessagebol = true;
         $timeout(function() {
             $state.go('login');
         }, 3000);
