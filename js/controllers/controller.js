@@ -29,12 +29,24 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         }
         $scope.login = function(formData){
             console.log(formData);
+            $scope.LoginFailurebool = false;
             NavigationService.login('/login/login',formData,function (data) {
-                console.log(data);
-            $.jStorage.set("profile", {
-            'credentials': data
-        });
-        $state.go("purchase-order");
+            console.log(data.success);
+            if(data.success == "false")
+            {
+            console.log("data.success");
+            $scope.LoginFailurebool = true; 
+            $scope.LoginFailureMessage = "Incorrect Creds,Go send the valid user!!";   
+            $state.go('login');
+            }
+            else
+            {
+                  $.jStorage.set("profile", {
+                    'credentials': data.access
+                    });
+                $state.go("purchase-order");      
+            }
+          
              });
         }
     })
@@ -91,6 +103,8 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     .controller('CategoryCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
+        $scope.profile = $.jStorage.get("profile");
+        console.log($scope.profile);
         $scope.template = TemplateService.changecontent("category");
         $scope.menutitle = NavigationService.makeactive("Category");
         TemplateService.title = $scope.menutitle;
@@ -192,6 +206,8 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     .controller('PurchaseOrderCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
+        
+        $scope.profile = $.jStorage.get("profile");
         $scope.template = TemplateService.changecontent("purchaseorder");
         $scope.menutitle = NavigationService.makeactive("Purchase Order(PO)");
         TemplateService.title = $scope.menutitle;
@@ -225,7 +241,6 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         // $.jStorage.set("profile", {
         //     'credentials': 0
         // });
-        $scope.profile = $.jStorage.get("profile");
 
         $scope.approveDecline = function (flag, item) {
             console.log(flag, item);
@@ -259,6 +274,9 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     .controller('StoreRoomEntryCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
+        
+        $scope.profile = $.jStorage.get("profile");
+        console.log($scope.profile);
         $scope.template = TemplateService.changecontent("storeroomentry");
         $scope.menutitle = NavigationService.makeactive("Store Room Entry");
         TemplateService.title = $scope.menutitle;
@@ -343,6 +361,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     .controller('StoreRoomCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
+        $scope.profile = $.jStorage.get("profile");
         $scope.template = TemplateService.changecontent("storeroom");
         $scope.menutitle = NavigationService.makeactive("Store Room");
         TemplateService.title = $scope.menutitle;
@@ -415,6 +434,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     .controller('ProductsCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
+        $scope.profile = $.jStorage.get("profile");
         $scope.template = TemplateService.changecontent("products");
         $scope.menutitle = NavigationService.makeactive("Products");
         TemplateService.title = $scope.menutitle;
@@ -453,6 +473,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     .controller('RequestRawMaterialCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
+        $scope.profile = $.jStorage.get("profile");
         $scope.template = TemplateService.changecontent("createproduct");
         $scope.menutitle = NavigationService.makeactive("Req Raw Materials");
         TemplateService.title = $scope.menutitle;
