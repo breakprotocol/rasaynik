@@ -4,17 +4,15 @@ include 'connect.php';
 $url =  $_SERVER['PHP_SELF'];	
 $url = explode("/", $url);
 
+if(isset($url[4]))
+$service = $url[4];
+
+
 if(isset($url[5]))
-$service = $url[5];
-
-
-if(isset($url[6]))
-$method = $url[6];
-
-
-
+$method = $url[5];
 
 $data = file_get_contents('php://input');
+
 switch($service)
 {
 	case "purchase_request":
@@ -51,13 +49,13 @@ switch($service)
 
 function login($method,$mysqli,$data)
 {
-	
+	// echo $data;
 	$data = json_decode($data,true);
-
-
+	// print_r $data;
 	if($method=="login")
 	{
 		$username = $data['username'];
+		// echo $username;
 		$password = $data['password'];
 		$loginResponse = array();
 		$stmt=$mysqli->prepare('SELECT * FROM user_details where user_name = ?');

@@ -7,7 +7,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.navigation = NavigationService.getnav();
     })
 
-    .controller('headerctrl', function ($scope, TemplateService, $uibModal,$state) {
+    .controller('headerctrl', function ($scope, TemplateService, $uibModal, $state) {
         $scope.template = TemplateService;
         $scope.$on('$stateChangeSuccess', function (event, toState, toParams, fromState, fromParams) {
             $(window).scrollTop(0);
@@ -15,71 +15,66 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
         var profile = $.jStorage.get("profile");
 
-        if(!profile){
+        if (!profile) {
             $state.go('login')
         }
     })
 
-    .controller('LoginCtrl', function ($scope, TemplateService, NavigationService,$uibModal,$state) {
+    .controller('LoginCtrl', function ($scope, TemplateService, NavigationService, $uibModal, $state) {
         $.jStorage.flush();
         $scope.template = TemplateService;
         $scope.formData = {};
-        $scope.goRegister = function()
-        {
+        $scope.goRegister = function () {
             $state.go("register");
         }
-        $scope.login = function(formData){
+        $scope.login = function (formData) {
             console.log(formData);
             $scope.LoginFailurebool = false;
-            NavigationService.login('/login/login',formData,function (data) {
-            console.log(data.success);
-            if(data.success == "false")
-            {
-            console.log("data.success");
-            $scope.LoginFailurebool = true; 
-            $scope.LoginFailureMessage = "Incorrect Creds,Go send the valid user!!";   
-            $state.go('login');
-            }
-            else
-            {
-                  $.jStorage.set("profile", {
-                    'credentials': data.access
+            NavigationService.login('/login/login', formData, function (data) {
+                console.log(data.success);
+                if (data.success == "false") {
+                    console.log("data.success");
+                    $scope.LoginFailurebool = true;
+                    $scope.LoginFailureMessage = "Incorrect Creds,Go send the valid user!!";
+                    $state.go('login');
+                } else {
+                    $.jStorage.set("profile", {
+                        'credentials': data.access
                     });
-                $state.go("purchase-order");      
-            }
-          
-             });
+                    $state.go("purchase-order");
+                }
+
+            });
         }
     })
 
-     .controller('RegisterCtrl', function ($scope, TemplateService, NavigationService,$uibModal,$state,$timeout) {
+    .controller('RegisterCtrl', function ($scope, TemplateService, NavigationService, $uibModal, $state, $timeout) {
         $showRegisterbool = false;
         $scope.successMessagebol = false;
         // if($jStorage.get("profile"))
         // {
         //     console.log("error");
         // }
-        if($scope.profile == 0)
-        {
+        if ($scope.profile == 0) {
             $showRegisterbool = true;
         }
         $scope.template = TemplateService;
         $scope.formData = {};
-        $scope.register = function(formData){
+        $scope.register = function (formData) {
             console.log(formData);
-            NavigationService.register('/login/register',formData,function (data) {
+            NavigationService.register('/login/register', formData, function (data) {
                 console.log(data);
-            $.jStorage.set("profile", {
-            'credentials': data
-        }); 
-        $scope.successMessage = "User Registered successfully. Redirecting to login page";
-        $scope.successMessagebol = true;
-        $timeout(function() {
-            $state.go('login');
-        }, 3000);
+                $.jStorage.set("profile", {
+                    'credentials': data
+                });
+                $scope.successMessage = "User Registered successfully. Redirecting to login page";
+                $scope.successMessagebol = true;
+                $timeout(function () {
+                    $state.go('login');
+                }, 3000);
 
-      //  $state.go("purchase-order");
-             });
+                //  $state.go("purchase-order");
+            });
         }
     })
 
@@ -217,8 +212,9 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
     .controller('PurchaseOrderCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
-        
+
         $scope.profile = $.jStorage.get("profile");
+        console.log("profile",$scope.profile);
         $scope.template = TemplateService.changecontent("purchaseorder");
         $scope.menutitle = NavigationService.makeactive("Purchase Order(PO)");
         TemplateService.title = $scope.menutitle;
@@ -244,7 +240,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         }
         $scope.viewTable();
 
-     
+
 
         // credentials--0 for PO Department
         // credentials--1 for admin 
@@ -276,16 +272,11 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
         }
 
-
-
-
-
-
     })
 
     .controller('StoreRoomEntryCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
-        
+
         $scope.profile = $.jStorage.get("profile");
         console.log($scope.profile);
         $scope.template = TemplateService.changecontent("storeroomentry");
@@ -325,45 +316,45 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.viewTable();
 
         $scope.items = [{
-            "store_room_entry_id":1,
+            "store_room_entry_id": 1,
             "name": "pratik patel",
             "type": "by-product",
             "quantity": "12"
         }, {
-            "store_room_entry_id":2,
+            "store_room_entry_id": 2,
             "name": "Vishal Singh",
             "type": "raw_material",
             "quantity": "22"
         }, {
-            "store_room_entry_id":3,
+            "store_room_entry_id": 3,
             "name": "Abhishek",
             "type": "qwerty",
             "quantity": "12"
         }, {
-            "store_room_entry_id":4,
+            "store_room_entry_id": 4,
             "name": "Ashish Raina",
             "type": "by-product",
             "quantity": "134"
         }];
 
-        $scope.approveDecline=function(obj,flag){
+        $scope.approveDecline = function (obj, flag) {
             console.log();
-            var sendObj ={
-                "store_room_entry_id":obj.id
+            var sendObj = {
+                "store_room_entry_id": obj.id
             }
             var url = "";
-            if(flag==1){
+            if (flag == 1) {
                 url = "/store_room_entry/accept";
-            }else if(flag==0){
-                url = "/store_room_entry/decline"                
+            } else if (flag == 0) {
+                url = "/store_room_entry/decline"
             }
 
-            NavigationService.approveDecline(url, sendObj, function(data){
+            NavigationService.approveDecline(url, sendObj, function (data) {
                 console.log(data);
-                if(flag==1){
-                   item.status="approve";
-                }else if(flag==0){
-                   item.status="reject";
+                if (flag == 1) {
+                    item.status = "approve";
+                } else if (flag == 0) {
+                    item.status = "reject";
                 }
             });
 
