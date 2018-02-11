@@ -21,7 +21,6 @@ var myApp = angular.module('myApp', [
 
 myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locationProvider) {
     // for http request with session
-    $.jStorage.flush();
     $stateProvider
 
         .state('dashboard', {
