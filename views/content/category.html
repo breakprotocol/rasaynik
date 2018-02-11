@@ -33,49 +33,57 @@
               <div>
                 <label>P.O. No. :</label>
                 <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.purchase_order_id" ng-readonly="readonly">
+                  <input type="text" class="po-form-to" ng-model="formData.purchase_order_id" ng-if="!readonly">
+                  <span ng-if="readonly">{{formData.purchase_order_id}}</span>
                 </div>
               </div>
               <div>
                 <label>Date :</label>
                 <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.date" ng-readonly="readonly">
+                  <input type="date" class="po-form-to" ng-model="formData.date" ng-if="!readonly">
+                 <span ng-if="readonly">{{formData.date |formatDate:'date'}}</span>
                 </div>
               </div>
               <div>
                 <label>Qtn. Date :</label>
                 <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.qtn_Dt" ng-readonly="readonly">
+                  <input type="date" class="po-form-to" ng-model="formData.qtn_Dt" ng-if="!readonly">
+                  <span ng-if="readonly">{{formData.qtn_Dt |formatDate:'date'}}</span>
                 </div>
               </div>
               <div>
                 <label>Req. Date :</label>
                 <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.req_Dt" ng-readonly="readonly">
+                  <input type="date" class="po-form-to" ng-model="formData.req_Dt" ng-if="!readonly">
+                  <span ng-if="readonly">{{formData.req_Dt |formatDate:'date'}}</span>
                 </div>
               </div>
               <div>
                 <label>For Unit :</label>
                 <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.unit" ng-readonly="readonly">
+                  <input type="text" class="po-form-to" ng-model="formData.unit" ng-if="!readonly">
+                  <span ng-if="readonly">{{formData.unit}}</span>
                 </div>
               </div>
               <div>
                 <label>Payment :</label>
                 <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.payment" ng-readonly="readonly">
+                  <input type="text" class="po-form-to" ng-model="formData.payment" ng-if="!readonly">
+                  <span ng-if="readonly">{{formData.payment}}</span>
                 </div>
               </div>
               <div>
                 <label>Transport :</label>
                 <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.transport" ng-readonly="readonly">
+                  <input type="text" class="po-form-to" ng-model="formData.transport" ng-if="!readonly">
+                  <span ng-if="readonly">{{formData.transport}}</span>
                 </div>
               </div>
               <div>
                   <label>Delivery Schedule :</label>
                   <div class="po-form-outer">
-                    <input type="text" class="po-form-to" ng-model="formData.delivery_schedule" ng-readonly="readonly">
+                    <input type="text" class="po-form-to" ng-model="formData.delivery_schedule" ng-if="!readonly">
+                    <span ng-if="readonly">{{formData.delivery_schedule}}</span>
                   </div>
                 </div>
 
@@ -133,22 +141,28 @@
                     <span>{{item.raw_material_name}}</span>
                   </td>
                   <td>
-                    <input type="text" style="width: 150px;" ng-model="item.raw_material_desc" ng-readonly="readonly">
+                    <input type="text" style="width: 150px;" ng-model="item.raw_material_desc" ng-if="!readonly">
+                    <span ng-if="readonly">{{item.raw_material_desc}}</span>
                   </td>
                   <td>
-                      <input type="text" style="width: 50px;" ng-model="item.raw_material_quality" ng-readonly="readonly">
+                      <input type="text" style="width: 50px;" ng-model="item.raw_material_quality" ng-if="!readonly">
+                      <span ng-if="readonly">{{item.raw_material_quality}}</span>
                     </td>
                   <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_qty" ng-readonly="readonly">
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_qty" ng-if="!readonly">
+                    <span ng-if="readonly">{{item.raw_material_qty}}</span>
                   </td>
                   <td>
-                    <input type="text" style="width: 50px;" ng-model="item.raw_material_unit" ng-readonly="readonly">
+                    <input type="text" style="width: 50px;" ng-model="item.raw_material_unit" ng-if="!readonly">
+                    <span ng-if="readonly">{{item.raw_material_unit}}</span>
                   </td>
                   <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_rate" ng-readonly="readonly">
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_rate" ng-if="!readonly">
+                    <span ng-if="readonly">{{item.raw_material_rate}}</span>
                   </td>
                   <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_amt" ng-readonly="readonly">
+                    <input type="number" style="width: 50px;" ng-model="item.raw_material_amt" ng-if="!readonly">
+                    <span ng-show="readonly">{{item.raw_material_amt = item.raw_material_rate * item.raw_material_qty}}</span>
                   </td>
                   <td ng-if="view">
                     <a class="btn btn-danger" ng-click="removeRow($index)">
@@ -168,9 +182,9 @@
             </table>
 
             <div class="final-amt">
-                <label>Total :</label>
+                <label>Total:</label>
                 <div class="po-form-outer pull-right">
-                  <input type="number" name="" id="" class="po-form-to" ng-model="formData.totalAmt" ng-readonly="readonly">
+                  <span>{{formData | totalAmt}}</span>
                 </div>
               </div>
           </div>

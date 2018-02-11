@@ -142,7 +142,7 @@ myApp.filter('formatDate', function () {
     return function (input, type) {
 
         if (type == 'date') {
-            var returnVal = moment(input).format('D MMM, YYYY');
+            var returnVal = moment(input).format('DD/MM/YY');
         } else if (type == 'time') {
             var returnVal = moment(input).format('hh:mm a');
         } else if (type == 'year') {
@@ -162,4 +162,23 @@ myApp.filter('truncate', function () {
             }
         }
     }
-})
+});
+
+myApp.filter('toInt', function () {
+    return function (value) {
+        if (value) {
+            return parseInt(value)
+        }
+    }
+});
+
+myApp.filter('totalAmt', function () {
+    return function (formData) {
+        console.log("formData",formData);
+        if (formData) {
+            var sum = _.sumBy(formData.raw_materials,'raw_material_amt');
+            console.log("sum",sum);
+            return sum;
+        }
+    }
+});

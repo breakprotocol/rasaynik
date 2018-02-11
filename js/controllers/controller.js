@@ -13,11 +13,11 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             $(window).scrollTop(0);
         });
 
-        var profile = $.jStorage.get("profile");
-
-        if (!profile) {
-            $state.go('login')
-        }
+        var profile = $.jStorage.get('profile');
+        console.log("profile",profile);
+        // if (!profile) {
+        //     $state.go('login')
+        // }
     })
 
     .controller('LoginCtrl', function ($scope, TemplateService, NavigationService, $uibModal, $state) {
@@ -184,8 +184,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 n = _.omit(n, ['products']);
                 return n;
             });
-            console.log("formData.raw_materials", formData);
-
+            formData.totalAmt = _.sumBy(formData.raw_materials,'raw_material_amt');
             NavigationService.savePO('/purchase_request/create', formData, function (data) {
                 console.log(data);
             })
@@ -214,7 +213,6 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         //Used to name the .html file
 
         $scope.profile = $.jStorage.get("profile");
-        console.log("profile",$scope.profile);
         $scope.template = TemplateService.changecontent("purchaseorder");
         $scope.menutitle = NavigationService.makeactive("Purchase Order(PO)");
         TemplateService.title = $scope.menutitle;
@@ -239,15 +237,6 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             });
         }
         $scope.viewTable();
-
-
-
-        // credentials--0 for PO Department
-        // credentials--1 for admin 
-        // change and see the dii=fference
-        // $.jStorage.set("profile", {
-        //     'credentials': 0
-        // });
 
         $scope.approveDecline = function (flag, item) {
             console.log(flag, item);
