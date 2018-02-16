@@ -112,6 +112,39 @@ function login($method,$mysqli,$data)
 				}
 	}
 
+	if($method=="changePassword")
+	{
+		$username = $data['username'];
+		$password = $data['password'];
+		
+		$password_hash = password_hash($password,PASSWORD_DEFAULT);
+		$stmt = $mysqli->prepare('UPDATE user_details SET user_pass = ? where user_name = ?');
+				$stmt->bind_param('ss',$password_hash,$username);
+				$result = $stmt->execute();
+				if($result)
+					echo $result;
+				else
+				{
+					echo "Theres some problem inserting the new raw material";
+					
+				}
+	}
+	if($method=="disableUser")
+	{
+		$username = $data['username'];
+		$stmt = $mysqli->prepare('DELETE FROM user_details WHERE user_name = ?');
+				$stmt->bind_param('s',$username);
+				$result = $stmt->execute();
+				if($result)
+					echo $result;
+				else
+				{
+					echo "Theres some problem";
+					
+				}
+
+	}
+
 }
 
 
