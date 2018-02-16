@@ -82,6 +82,33 @@ user register
 {"username":"pratik","password":"pratik","access":1}
 
 
+
+request_raw_materials
+
+Create
+http://localhost/rasaynik1/rasaynik/backend/request.php/product_request/create
+
+{"product_name":"abc","product_quantity":"10","location":"plant1","client_order":"def","raw_materials":[{"raw_material_qty":10,"raw_material_unit":"lts","raw_material":{"raw_material_id":"1","raw_material_name":"abc"}}]}
+
+
+
+Get all raw materials 
+http://localhost/rasaynik1/rasaynik/backend/request.php/store_room/getAllRawMaterials
+
+
+Store Room Exit 
+approve
+http://localhost/rasaynik1/rasaynik/backend/request.php/store_room_exit/accept
+{"store_room_exit_id":17}
+decline
+http://localhost/rasaynik1/rasaynik/backend/request.php/store_room_exit/decline
+{"store_room_exit_id":17}
+
+Get a new PO Number
+http://localhost/rasaynik1/rasaynik/backend/request.php/purchase_request/getPONumber
+
+
+
 Access Level
 0 - All Access
 1 - Purchase Order Create(PO guy)

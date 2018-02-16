@@ -44,7 +44,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
         })
 
         .state('store-room-entry', {
-            url: "/StoreRoomEntryCtrl",
+            url: "/storeroomentry",
             templateUrl: "views/template.html",
             controller: 'StoreRoomEntryCtrl'
         })
