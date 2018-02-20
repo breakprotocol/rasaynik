@@ -1,0 +1,151 @@
+<div class="heading-sec">
+    <div class="row">
+        <div class="col-md-4 column">
+            <div class="heading-profile">
+                <h2>Create Request</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TABLE  -->
+<div class=" panel-content ">
+    <div class="row ">
+        <div class="col-md-12 ">
+            <div class="widget ">
+                <div class="table-area ">
+                    <div class="widget-title ">
+                        <div class="pull-right">
+                            <!-- <form class="search-form mr-form ">
+                    <input type="text " ng-change="searchInTable(search) " placeholder="Search Here...
+                                       " ng-model="search" />
+                  </form> -->
+                        </div>
+
+
+                        <div class="pull-right">
+                            <div>
+                                <label>Name :</label>
+                                <div class="po-form-outer">
+                                    <input type="text" class="po-form-to" ng-model="formData.product_name" ng-if="!readonly">
+                                    <span ng-if="readonly">{{formData.unit}}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label>Quantity :</label>
+                                <div class="po-form-outer">
+                                    <input type="text" class="po-form-to" ng-model="formData.product_quantity" ng-if="!readonly">
+                                    <span ng-if="readonly">{{formData.unit}}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label>Location :</label>
+                                <div class="po-form-outer">
+                                    <input type="text" class="po-form-to" ng-model="formData.location" ng-if="!readonly">
+                                    <span ng-if="readonly">{{formData.payment}}</span>
+                                </div>
+                            </div>
+                            <div>
+                                <label>Client Order :</label>
+                                <div class="po-form-outer">
+                                    <input type="text" class="po-form-to" ng-model="formData.client_order" ng-if="!readonly">
+                                    <span ng-if="readonly">{{formData.transport}}</span>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="table-responsive">
+                        <!--<div class="table-responsive " ng-show="totalItems>0 ">-->
+                        <table class="table  table-border">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Unit
+                                    </th>
+                                    <th>
+                                        Quantity
+                                    </th>
+                                    <th ng-if="profile.credentials==4 || profile.credentials==0">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!--<tr ng-repeat="item in items">-->
+                                <tr ng-repeat="item in formData.raw_materials track by $index">
+                                    <!--<tr>-->
+                                    <!-- for pagination -->
+                                    <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
+                                    <td>{{$index + 1}}</td>
+
+                                    <td ng-if="!readonly">
+                                        <ui-select ng-model="item.raw_material" theme="bootstrap" style="width: 150px;" title="Choose a person"  on-select="assign($select.selected.min_to_maintain,item)">
+                                            <ui-select-match placeholder="Name">{{$select.selected.name}}</ui-select-match>
+                                            <ui-select-choices repeat="{'raw_material_id':prod.id,'raw_material_name':prod.name} as prod in item.products"
+                                                on-select="setNewRaw(products,$select.search)" refresh-delay="5">
+                                                <div ng-bind-html="(prod.name | highlight: $select.search) +' (new)'"></div>
+                                            </ui-select-choices>
+                                        </ui-select>
+                                    </td>
+                                    <td ng-if="readonly">
+                                        <span>{{item.raw_material_name}}</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" style="width: 150px;" ng-model="item.raw_material_unit" ng-if="!readonly">
+                                        <span ng-if="readonly">{{item.raw_material_unit}}</span>
+                                    </td>
+                                    <td>
+                                        <input type="text" style="width: 50px;" ng-model="item.raw_material_qty" ng-change="isValid(item,item.raw_material_qty)" ng-if="!readonly">
+                                        <span ng-if="readonly">{{item.raw_material_qty}}</span>
+                                        <span class="wrong-indication" ng-if="!item.isValid">x</span>
+                                    </td>
+                                   
+                                    <td>
+                                        <a class="btn btn-danger" ng-click="removeRow($index)">
+                                            <i class="fa fa-trash"></i> Remove
+                                        </a>
+                                    </td>
+                                    <td ng-if="profile.credentials==2 || profile.credentials==0">
+                                        <a class="btn" ng-class="{'btn-success':item.status=='approve'}" ng-click="item.status='approve'">
+                                            <i class="fa fa-thumbs-up fa-2x"></i>
+                                        </a>
+                                        <a class="btn" ng-class="{'btn-danger':item.status=='reject'}" ng-click="item.status='reject'">
+                                            <i class="fa fa-thumbs-down fa-2x"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- <div class="final-amt">
+                            <label>Total:</label>
+                            <div class="po-form-outer pull-right">
+                                <span>{{formData | totalAmt}}</span>
+                            </div>
+                        </div> -->
+                    </div>
+
+                    <div class="tableData ">
+                        <input type="button" class="btn btn-success pull-right" ng-click="addRow()" value="Add">
+                        </input>
+                    </div>
+                    <div>
+
+                    </div>
+
+                    <div class="text-center mt20 odd-even-button">
+                        <button class="btn btn-default" type="submit" ng-click="saveData(formData)">Submit</button>
+                        <!-- <button class="btn btn-default" type="submit" ng-click="submitApproveReject(formData)">Submit</button> -->
+
+                        <button class="btn btn-default" ui-sref="list-request-raw-material">Cancel</button>
+                    </div>
+                </div>
+                <pre>{{formData | json}}</pre>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- TABLE  END -->

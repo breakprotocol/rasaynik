@@ -59,7 +59,13 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             url: "/requestrawmaterial",
             templateUrl: "views/template.html",
             controller: 'RequestRawMaterialCtrl'
-        })    
+        })   
+        
+        .state('list-request-raw-material', {
+            url: "/listreqrawmaterial",
+            templateUrl: "views/template.html",
+            controller: 'ListRequestRawMaterialCtrl'
+        })   
       
         //sports
        

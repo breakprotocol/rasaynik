@@ -1,0 +1,117 @@
+<div class="heading-sec">
+    <div class="row">
+        <div class="col-md-4 column">
+            <div class="heading-profile">
+                <h2>Requested Raw Material</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TABLE  -->
+<div class=" panel-content ">
+    <div class="row ">
+        <div class="col-md-12 ">
+            <div class="widget ">
+                <div class="table-area ">
+                    <div class="widget-title ">
+                        <div class="pull-right">
+                            <!-- <form class="search-form mr-form ">
+                                <input type="text" placeholder="Search Here..." ng-model="search" />
+                            </form> -->
+                            <a class="btn btn-success" ng-if="profile.credentials==4 || profile.credentials==0" ui-sref="request-raw-material">
+                                Create
+                            </a>
+                        </div>
+                        <h3>Raw Material
+                            <span class="tableTotal">(Total : {{totalItems}}) </span>
+                        </h3>
+
+                        <!-- Filters:
+                        <div class="select-box">
+                            <ui-select ng-model="filterBy" theme="selectize" ng-disabled="ctrl.disabled" style="width: 300px;" title="Choose a country"
+                                append-to-body="true">
+                                <ui-select-match placeholder="Select or search a country in the list...">{{$select.selected}}</ui-select-match>
+                                <ui-select-choices repeat="type in filterKeys | filter: $select.search">
+                                    <span ng-bind-html="type | highlight: $select.search"></span>
+                                </ui-select-choices>
+                            </ui-select>
+                        </div>
+                        <input type="text" ng-model=""> -->
+                    </div>
+                    <div class="table-responsive">
+                        <!--<div class="table-responsive " ng-show="totalItems>0 ">-->
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Quantity
+                                    </th>
+                                    <th>
+                                        Location
+                                    </th>
+                                    <th>
+                                        Client Order
+                                    </th>
+                                    <th>
+                                        Status
+                                    </th>
+                                    <th>
+                                        Action
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                                <!-- ng-repeat="item in formData.raw_materials track by $index" -->
+                                <tr ng-repeat="item in items | filter:search track by $index ">
+                                    <!--<tr>-->
+                                    <!-- for pagination -->
+                                    <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
+                                    <td>{{$index + 1}}</td>
+
+
+                                    <td>
+                                        {{item.name}}
+                                    </td>
+                                    <td>
+                                        {{item.description}}
+                                    </td>
+                                    <td>
+                                        {{item.quantity}}
+                                    </td>
+                                    <td>
+                                        {{item.quantity}}
+                                    </td>
+                                    <td>
+                                        {{item.location}}
+                                    </td>
+                                    <td>
+                                        {{item.type}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tableData " ng-show="totalItems===0 ">
+                        <h5>No data found</h5>
+                      </div>
+                      <div class="tableData " ng-show="totalItems===undefined ">
+                        <h5>Loading Data</h5>
+                      </div>
+                      <ul ng-if="totalItems" ng-change="viewTable();" uib-pagination total-items="totalItems" items-per-page="maxRow" ng-model="formData.page"
+                        max-size="template.pageMax" class="pagination-sm" boundary-links="true " force-ellipses="true "></ul>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- TABLE  END -->

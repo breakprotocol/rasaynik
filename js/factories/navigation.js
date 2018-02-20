@@ -24,7 +24,7 @@ myApp.factory('NavigationService', function ($http) {
         },{
             name: "Req Raw Materials",
             classis: "activeColor",
-            sref: "#/requestrawmaterial",
+            sref: "#/listreqrawmaterial",
             icon: "phone"
         },{
             name: "Products",

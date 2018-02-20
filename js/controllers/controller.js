@@ -14,7 +14,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         });
 
         var profile = $.jStorage.get('profile');
-        console.log("profile",profile);
+        console.log("profile", profile);
         // if (!profile) {
         //     $state.go('login')
         // }
@@ -184,7 +184,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 n = _.omit(n, ['products']);
                 return n;
             });
-            formData.totalAmt = _.sumBy(formData.raw_materials,'raw_material_amt');
+            formData.totalAmt = _.sumBy(formData.raw_materials, 'raw_material_amt');
             NavigationService.savePO('/purchase_request/create', formData, function (data) {
                 console.log(data);
             })
@@ -465,7 +465,85 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
     .controller('RequestRawMaterialCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
         $scope.profile = $.jStorage.get("profile");
-        $scope.template = TemplateService.changecontent("createproduct");
+        $scope.template = TemplateService.changecontent("reqrawmateial");
+        $scope.menutitle = NavigationService.makeactive("Req Raw Materials");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        $scope.profile = $.jStorage.get("profile");
+
+        $scope.formData = {
+            "raw_materials": []
+        };
+
+        NavigationService.getReqNo('//', function (data) {
+            $scope.formData.reqNo = data;
+        })
+
+
+        $scope.addRow = function () {
+            var obj = {
+                "raw_material_qty": "",
+                "raw_material_unit": "",
+                "raw_material": {
+                    "raw_material_id": "",
+                    "raw_material_name": ""
+                },
+                "products": _.cloneDeep($scope.products),
+                "isValid":true
+            }
+            $scope.formData.raw_materials.push(obj);
+        };
+
+        $scope.removeRow = function (index) {
+            $scope.formData.raw_materials.splice(index, 1);
+        }
+
+        NavigationService.getAllRaw_materials('/store_room/getAllRawMaterials', $scope.data,
+            function (data) {
+                $scope.products = data;
+                $scope.products.unshift({
+                    'id': "",
+                    "name": ""
+                });
+                $scope.addRow();
+            });
+
+        $scope.isValid = function(item,requested){
+            console.log(requested,item.minimum,requested>item.minimum);
+          if(requested > parseInt(item.minimum)){
+            toastr.error("Requested Quantity Is Out Of Stock");
+            item.isValid = false;            
+          }else{
+            item.isValid = true;
+          }
+        }
+
+        $scope.assign = function(min, item){
+            console.log(min);
+            item.minimum = min;            
+        }
+
+        $scope.saveData = function(formData){
+            var index = _.findIndex(formData.raw_materials,['isValid',false]);
+            console.log(index);
+            if(index!=-1){
+                toastr.error("Please Correct The Data Before Submitting");
+            }else{
+                formData.raw_materials = _.map(formData.raw_materials, function (n) {
+                    n = _.omit(n, ['products','isValid','minimum']);
+                    return n;
+                });
+                console.log("formData",formData);
+                toastr.success("Correct Entry");                
+            }
+        }
+    })
+
+    .controller('ListRequestRawMaterialCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.profile = $.jStorage.get("profile");
+        $scope.template = TemplateService.changecontent("listreqrawmaterial");
         $scope.menutitle = NavigationService.makeactive("Req Raw Materials");
         TemplateService.title = $scope.menutitle;
         $scope.navigation = NavigationService.getnav();
