@@ -476,9 +476,9 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
             "raw_materials": []
         };
 
-        NavigationService.getReqNo('//', function (data) {
-            $scope.formData.reqNo = data;
-        })
+        // NavigationService.getReqNo('//', function (data) {
+        //     $scope.formData.reqNo = data;
+        // })
 
 
         $scope.addRow = function () {
@@ -535,7 +535,10 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                     return n;
                 });
                 console.log("formData",formData);
-                toastr.success("Correct Entry");                
+                toastr.success("Correct Entry"); 
+                NavigationService.save('/product_request/create',formData,function(data){
+                    console.log(data);
+                })               
             }
         }
     })
@@ -549,48 +552,24 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.navigation = NavigationService.getnav();
 
         $scope.profile = $.jStorage.get("profile");
-
-        $scope.formData = {
-            "raw_materials": []
-        };
-
-        NavigationService.getReqNo('//', function (data) {
-            $scope.formData.reqNo = data;
-        })
-
-
-        $scope.addRow = function () {
-            var obj = {
-                "raw_material_id": "",
-                "raw_material_name": "",
-                "raw_material_desc": "",
-                "raw_material_quality": "",
-                "raw_material_qty": "",
-                "raw_material_unit": "",
-                "raw_material_rate": "",
-                "raw_material_amt": "",
-                "totalAmt": "",
-                "raw_material": {
-                    "raw_material_id": "",
-                    "raw_material_name": ""
-                },
-                "products": _.cloneDeep($scope.products)
-            }
-            $scope.formData.raw_materials.push(obj);
-        };
-
-        $scope.removeRow = function (index) {
-            $scope.formData.raw_materials.splice(index, 1);
-        }
-
-        NavigationService.getAllRaw_materials('/raw_materials/getAll', $scope.data,
-            function (data) {
-                $scope.products = data;
-                $scope.products.unshift({
-                    'id': "",
-                    "name": ""
-                });
-                $scope.addRow();
+    
+        NavigationService.getAll('/product_request/getAll',function (data) {
+                $scope.items = data;               
             });
 
+    })
+
+    .controller('StoreRoomExitCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.profile = $.jStorage.get("profile");
+        $scope.template = TemplateService.changecontent("storeroomexit");
+        $scope.menutitle = NavigationService.makeactive("Store Room Exit");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        $scope.profile = $.jStorage.get("profile");
+
+        NavigationService.getAll('/product_request/getAll',function (data) {
+            $scope.items = data;               
+        });
     });

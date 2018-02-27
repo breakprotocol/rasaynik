@@ -27,6 +27,11 @@ myApp.factory('NavigationService', function ($http) {
             sref: "#/listreqrawmaterial",
             icon: "phone"
         },{
+            name: "Store Room Exit",
+            classis: "activeColor",
+            sref: "#/storeroomexit",
+            icon: "phone"
+        },{
             name: "Products",
             classis: "activeColor",
             sref: "#/products",
@@ -177,6 +182,15 @@ myApp.factory('NavigationService', function ($http) {
                 method: "POST",
                 url: adminurl + url,
                 data: data
+            }).then(function (data) {
+                callback(data.data);
+            });
+        },
+
+        getAll:function(url,callback){
+            $http({
+                method: "POST",
+                url: adminurl + url
             }).then(function (data) {
                 callback(data.data);
             });

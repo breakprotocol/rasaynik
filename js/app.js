@@ -65,7 +65,13 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             url: "/listreqrawmaterial",
             templateUrl: "views/template.html",
             controller: 'ListRequestRawMaterialCtrl'
-        })   
+        })
+        
+        .state('store-room-exit', {
+            url: "/storeroomexit",
+            templateUrl: "views/template.html",
+            controller: 'StoreRoomExitCtrl'
+        })
       
         //sports
        
