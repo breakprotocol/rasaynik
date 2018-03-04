@@ -125,6 +125,12 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             templateUrl: "views/template.html",
             controller: 'DetailMatchesCtrl'
         })
+
+        .state('manage-users', {
+            url: "/manageusers",
+            templateUrl: "views/template.html",
+            controller: 'ManageUserCtrl'
+        })
         // ***************EDIT PAGES FOR DIGITAL SCORING *******************
         
         .state('jagz', {

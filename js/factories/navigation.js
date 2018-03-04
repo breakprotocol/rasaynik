@@ -36,6 +36,11 @@ myApp.factory('NavigationService', function ($http) {
             classis: "activeColor",
             sref: "#/products",
             icon: "phone"
+        },{
+            name: "Manage Users",
+            classis: "activeColor",
+            sref: "#/manageusers",
+            icon: "phone"
         }
     ];
 

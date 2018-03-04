@@ -490,7 +490,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                     "raw_material_name": ""
                 },
                 "products": _.cloneDeep($scope.products),
-                "isValid":true
+                "isValid": true
             }
             $scope.formData.raw_materials.push(obj);
         };
@@ -509,36 +509,36 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 $scope.addRow();
             });
 
-        $scope.isValid = function(item,requested){
-            console.log(requested,item.minimum,requested>item.minimum);
-          if(requested > parseInt(item.minimum)){
-            toastr.error("Requested Quantity Is Out Of Stock");
-            item.isValid = false;            
-          }else{
-            item.isValid = true;
-          }
+        $scope.isValid = function (item, requested) {
+            console.log(requested, item.minimum, requested > item.minimum);
+            if (requested > parseInt(item.minimum)) {
+                toastr.error("Requested Quantity Is Out Of Stock");
+                item.isValid = false;
+            } else {
+                item.isValid = true;
+            }
         }
 
-        $scope.assign = function(min, item){
+        $scope.assign = function (min, item) {
             console.log(min);
-            item.minimum = min;            
+            item.minimum = min;
         }
 
-        $scope.saveData = function(formData){
-            var index = _.findIndex(formData.raw_materials,['isValid',false]);
+        $scope.saveData = function (formData) {
+            var index = _.findIndex(formData.raw_materials, ['isValid', false]);
             console.log(index);
-            if(index!=-1){
+            if (index != -1) {
                 toastr.error("Please Correct The Data Before Submitting");
-            }else{
+            } else {
                 formData.raw_materials = _.map(formData.raw_materials, function (n) {
-                    n = _.omit(n, ['products','isValid','minimum']);
+                    n = _.omit(n, ['products', 'isValid', 'minimum']);
                     return n;
                 });
-                console.log("formData",formData);
-                toastr.success("Correct Entry"); 
-                NavigationService.save('/product_request/create',formData,function(data){
+                console.log("formData", formData);
+                toastr.success("Correct Entry");
+                NavigationService.save('/product_request/create', formData, function (data) {
                     console.log(data);
-                })               
+                })
             }
         }
     })
@@ -552,10 +552,10 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.navigation = NavigationService.getnav();
 
         $scope.profile = $.jStorage.get("profile");
-    
-        NavigationService.getAll('/product_request/getAll',function (data) {
-                $scope.items = data;               
-            });
+
+        NavigationService.getAll('/product_request/getAll', function (data) {
+            $scope.items = data;
+        });
 
     })
 
@@ -569,7 +569,45 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
 
         $scope.profile = $.jStorage.get("profile");
 
-        NavigationService.getAll('/product_request/getAll',function (data) {
-            $scope.items = data;               
+        NavigationService.getAll('/product_request/getAll', function (data) {
+            $scope.items = data;
         });
+
+        $scope.approveDecline = function (flag, item) {
+            console.log(flag, item);
+            var sendObj = {
+                "store_room_exit_id": item.request_id
+            };
+            if (flag == 1) {
+                NavigationService.approveDecline('/store_room_exit/accept', sendObj, function (data) {
+                    if (data == 1) {
+                        item.request_status = 'Complete'
+                    }
+                });
+            } else if (flag == 0) {
+                NavigationService.approveDecline('/store_room_exit/decline', sendObj, function (data) {
+                    if (data == 1) {
+                        item.request_status = 'Rejected'
+                    }
+                });
+            }
+
+        }
+    })
+
+    .controller('StoreRoomExitCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.profile = $.jStorage.get("profile");
+        $scope.template = TemplateService.changecontent("manageuser");
+        $scope.menutitle = NavigationService.makeactive("Manage User");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        $scope.profile = $.jStorage.get("profile");
+
+        // NavigationService.getAll('/product_request/getAll', function (data) {
+        //     $scope.items = data;
+        // });
+
+     
     });

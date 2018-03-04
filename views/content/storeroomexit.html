@@ -66,7 +66,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                            
+
                                 <!-- ng-repeat="item in formData.raw_materials track by $index" -->
                                 <tr ng-repeat="item in items | filter:search track by $index ">
                                     <!--<tr>-->
@@ -90,6 +90,14 @@
                                     <td>
                                         {{item.request_status}}
                                     </td>
+                                    <td>
+                                        <a class="btn" ng-class="{'btn-success':item.request_status=='Complete'}" ng-click="approveDecline(1,item)">
+                                            <i class="fa fa-thumbs-up fa-2x"></i>
+                                        </a>
+                                        <a class="btn" ng-class="{'btn-danger':item.request_status=='Rejected'}" ng-click="approveDecline(0,item)">
+                                            <i class="fa fa-thumbs-down fa-2x"></i>
+                                        </a>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -97,18 +105,18 @@
 
                     <div class="tableData " ng-show="totalItems===0 ">
                         <h5>No data found</h5>
-                      </div>
-                      <div class="tableData " ng-show="totalItems===undefined ">
+                    </div>
+                    <div class="tableData " ng-show="totalItems===undefined ">
                         <h5>Loading Data</h5>
-                      </div>
-                      <ul ng-if="totalItems" ng-change="viewTable();" uib-pagination total-items="totalItems" items-per-page="maxRow" ng-model="formData.page"
+                    </div>
+                    <ul ng-if="totalItems" ng-change="viewTable();" uib-pagination total-items="totalItems" items-per-page="maxRow" ng-model="formData.page"
                         max-size="template.pageMax" class="pagination-sm" boundary-links="true " force-ellipses="true "></ul>
-                    </div>
-                    <div>
-                    </div>
+                </div>
+                <div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <!-- TABLE  END -->
