@@ -1,3 +1,9 @@
+if (isproduction) {
+    adminurl = "http://localhost/rasaynik/backend/request.php";    
+} else {
+    adminurl = "http://localhost/rasaynik/backend/request.php";   
+}
+
 var imgurl = adminurl + "/upload/";
 
 var imgpath = imgurl + "readFile";
