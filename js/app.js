@@ -80,11 +80,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             templateUrl: "views/template.html",
             controller: 'PageJsonCtrl'
         })
-        // .state('page', {
-        //     url: "/page/:id/{page:.*}/{keyword:.*}/{filter:.*}",
-        //     templateUrl: "views/template.html",
-        //     controller: 'PageJsonCtrl'
-        // })
+       
         .state('login', {
             url: "/login",
             templateUrl: "views/login.html",
@@ -92,7 +88,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
         })
         .state('register', {
             url: "/register",
-            templateUrl: "views/register.html",
+            templateUrl: "views/template.html",
             controller: 'RegisterCtrl'
         })
         
@@ -130,6 +126,12 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             url: "/manageusers",
             templateUrl: "views/template.html",
             controller: 'ManageUserCtrl'
+        })
+        
+        .state('edit-users', {
+            url: "/editusers/:username",
+            templateUrl: "views/template.html",
+            controller: 'EditUserCtrl'
         })
         // ***************EDIT PAGES FOR DIGITAL SCORING *******************
         

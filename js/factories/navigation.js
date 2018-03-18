@@ -112,7 +112,7 @@ myApp.factory('NavigationService', function ($http) {
                 url: adminurl + url,
                 data: data
             }).then(function (data) {
-                console.log(data.data);
+                callback(data.data);
             });
         },
 

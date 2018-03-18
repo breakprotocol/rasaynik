@@ -1,0 +1,43 @@
+<div class="heading-sec">
+        <div class="row">
+            <div class="col-md-4 column">
+                <div class="heading-profile">
+                    <h2>Edit User</h2>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class=" panel-content">
+                    <div class="row" style="background-color:white ;border-radius: 5px;" >
+                        <div class="col-md-4">
+                            <div class = "table-area ">
+                                <div class="form-horizontal"></div>
+                                <div class="form-group">
+                                    <form><!-- 
+                                      <div class="form-group">
+                                        <label for="exampleInputEmail1">User Name</label>
+                                        <input type="email"  class="form-control" ng-model="formData.username">
+                                         </div> -->
+                                      <div class="form-group">
+                                        <label for="exampleInputPassword1">Username</label>
+                                        <input type="text" class="form-control"  placeholder="" readonly ng-model="formData.username">
+                                      </div>
+                                      <div class="form-group">
+                                        <label for="exampleInputPassword1">Password</label>
+                                        <input type="password" class="form-control"  placeholder="" ng-model="formData.password">
+                                      </div>
+                                      <button type="submit" class="btn btn-primary" ng-click="update(formData)">Update</button>
+                                    </form>
+                                </div>
+        
+                                      <div class="col-lg-12 col-sm-12 col-xs-12 alert alert-success" ng-show="successMessagebool ">
+                                      <strong>{{successMessage }}</strong>
+                                      </div>
+                            </div>
+                        </div>
+                    </div>
+    </div>
+    </div>
+    
+    

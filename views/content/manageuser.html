@@ -1,0 +1,93 @@
+<div class="heading-sec">
+    <div class="row">
+        <div class="col-md-4 column">
+            <div class="heading-profile">
+                <h2>Manage User</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- TABLE  -->
+<div class=" panel-content">
+    <div class="row ">
+        <div class="col-md-12 ">
+            <div class="widget ">
+                <div class="table-area ">
+                    <div class="widget-title ">
+                        <div class="pull-right">
+                            <!-- <form class="search-form mr-form ">
+                                <input type="text" placeholder="Search Here..." ng-model="search" />
+                            </form> -->
+                            <a class="btn btn-success" ng-if="profile.credentials==0" ui-sref="register">
+                                Register New User
+                            </a>
+                        </div>
+                        <h3>Users
+                            <span class="tableTotal">(Total : {{items.length}}) </span>
+                        </h3>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>#</th>
+                                    <th>
+                                        Name
+                                    </th>
+                                    <th>
+                                        Access Level
+                                    </th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            
+                                <!-- ng-repeat="item in formData.raw_materials track by $index" -->
+                                <tr ng-repeat="item in items | filter:search track by $index ">
+                                    <!--<tr>-->
+                                    <!-- for pagination -->
+                                    <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
+                                    <td>{{$index + 1}}</td>
+
+
+                                    <td>
+                                        {{item.user_name}}
+                                    </td>
+                                    <td>
+                                        {{item.access_level}}
+                                    </td>
+                                    <td>
+                                        <a class="btn btn-primary" target="_blank" ui-sref="edit-users({username:item.user_name})">
+                                                <i class="fa fa-pencil"></i> Edit
+                                              </a>
+                                        <a class="btn btn-danger" ng-click="confDel(item.user_name)">
+                                                <i class="fa fa-trash"></i> Delete
+                                              </a>
+                                      </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="tableData " ng-show="totalItems===0 ">
+                        <h5>No data found</h5>
+                      </div>
+                      <div class="tableData " ng-show="totalItems===undefined ">
+                        <h5>Loading Data</h5>
+                      </div>
+                      <ul ng-if="totalItems" ng-change="viewTable();" uib-pagination total-items="totalItems" items-per-page="maxRow" ng-model="formData.page"
+                        max-size="template.pageMax" class="pagination-sm" boundary-links="true " force-ellipses="true "></ul>
+                    </div>
+                    <div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- <div ng-include="login.html">
+ <span>pratik</span>
+</div> -->
+<!-- TABLE  END -->

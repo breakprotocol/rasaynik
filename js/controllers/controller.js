@@ -49,6 +49,16 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
     })
 
     .controller('RegisterCtrl', function ($scope, TemplateService, NavigationService, $uibModal, $state, $timeout) {
+
+        $scope.profile = $.jStorage.get("profile");
+        console.log($scope.profile);
+
+        $scope.template = TemplateService.changecontent("register");
+        $scope.menutitle = NavigationService.makeactive("Register");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+
         $showRegisterbool = false;
         $scope.successMessagebol = false;
         // if($jStorage.get("profile"))
@@ -58,7 +68,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         if ($scope.profile == 0) {
             $showRegisterbool = true;
         }
-        $scope.template = TemplateService;
+
         $scope.formData = {};
         $scope.register = function (formData) {
             console.log(formData);
@@ -76,6 +86,8 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
                 //  $state.go("purchase-order");
             });
         }
+
+
     })
 
     .controller('AccessController', function ($scope, TemplateService, NavigationService, $timeout, $state) {
@@ -595,7 +607,7 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         }
     })
 
-    .controller('StoreRoomExitCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+    .controller('ManageUserCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
         //Used to name the .html file
         $scope.profile = $.jStorage.get("profile");
         $scope.template = TemplateService.changecontent("manageuser");
@@ -604,10 +616,77 @@ myApp.controller('DashboardCtrl', function ($scope, TemplateService, NavigationS
         $scope.navigation = NavigationService.getnav();
 
         $scope.profile = $.jStorage.get("profile");
+        $scope.getAllUser = function () {
+            NavigationService.getAll('/login/getAll', function (data) {
+                $scope.items = data;
+            });
+        };
+        $scope.getAllUser();
 
-        // NavigationService.getAll('/product_request/getAll', function (data) {
-        //     $scope.items = data;
-        // });
+        // DELETE
+        $scope.confDel = function (data) {
+            $scope.deleteId = data;
+            $scope.modalInstance = $uibModal.open({
+                animation: $scope.animationsEnabled,
+                templateUrl: 'views/modal/delete.html',
+                backdrop: 'static',
+                keyboard: false,
+                size: 'sm',
+                scope: $scope
+            });
+        };
 
-     
+        $scope.noDelete = function () {
+            $scope.modalInstance.close();
+        }
+
+        $scope.delete = function (username) {
+            // console.log(data);
+            var url = "/login/disableUser";
+            var obj = {};
+            obj.username = username;
+            NavigationService.delete(url, obj, function (data) {
+                console.log(data);
+                // alert("outside");
+                
+                if (data == '1' || data == "true" || data == 1) {
+                    // alert("inside");
+                    toastr.success('User '+username+' Successfully Deleted');
+                    $scope.modalInstance.close();
+                    $scope.getAllUser();
+                } else {
+                    toastr.error('Something Went Wrong while Deleting');
+                }
+            });
+        }
+        // DELETE END
+
+
+    })
+
+    .controller('EditUserCtrl', function ($scope, TemplateService, NavigationService, $timeout, $stateParams, $state, toastr, $uibModal) {
+        //Used to name the .html file
+        $scope.profile = $.jStorage.get("profile");
+        $scope.template = TemplateService.changecontent("edituser");
+        $scope.menutitle = NavigationService.makeactive("Manage User");
+        TemplateService.title = $scope.menutitle;
+        $scope.navigation = NavigationService.getnav();
+
+        $scope.formData = {
+            "username":$stateParams.username
+        };
+        
+        $scope.update = function (formData) {
+            NavigationService.getAll('/login/changePassword', function (data) {
+                if (data == '1' || data == "true" || data == 1) {
+                    // alert("inside");
+                    toastr.success('User '+formData.username+' Updated Successfully');
+                    
+                    $state.go('manage-users');
+                } else {
+                    toastr.error('Something Went Wrong while Updating');
+                }
+            });
+        };    
+
     });

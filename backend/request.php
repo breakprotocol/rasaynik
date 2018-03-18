@@ -4,12 +4,12 @@ include 'connect.php';
 $url =  $_SERVER['PHP_SELF'];	
 $url = explode("/", $url);
 
+if(isset($url[4]))
+$service = $url[4];
+
+
 if(isset($url[5]))
-$service = $url[5];
-
-
-if(isset($url[6]))
-$method = $url[6];
+$method = $url[5];
 
 $data = file_get_contents('php://input');
 
@@ -60,6 +60,7 @@ function login($method,$mysqli,$data)
 	// print_r $data;
 	if($method=="login")
 	{
+		echo json_encode($data);
 		$username = $data['username'];
 		// echo $username;
 		$password = $data['password'];
@@ -100,6 +101,7 @@ function login($method,$mysqli,$data)
 		$password = $data['password'];
 		$access = $data['access'];
 		$password_hash = password_hash($password,PASSWORD_DEFAULT);
+		echo $password_hash;
 		$stmt = $mysqli->prepare('INSERT INTO user_details(user_name,user_pass,access_level) values (?, ?, ?)');
 				$stmt->bind_param('sss',$username,$password_hash,$access);
 				$result = $stmt->execute();
@@ -116,11 +118,14 @@ function login($method,$mysqli,$data)
 	{
 		$username = $data['username'];
 		$password = $data['password'];
+		echo json_encode($data);
 		
 		$password_hash = password_hash($password,PASSWORD_DEFAULT);
+//echo $password_hash;
 		$stmt = $mysqli->prepare('UPDATE user_details SET user_pass = ? where user_name = ?');
 				$stmt->bind_param('ss',$password_hash,$username);
 				$result = $stmt->execute();
+				//echo $result;
 				if($result)
 					echo $result;
 				else
@@ -144,6 +149,23 @@ function login($method,$mysqli,$data)
 				}
 
 	}
+	if($method=="getAll")
+	{
+		$stmt=$mysqli->prepare('SELECT user_name,access_level from user_details');
+		$stmt->execute();
+		$result = $stmt->get_result();
+		$result = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+			if($result)
+			echo json_encode($result);
+			else
+				{
+					echo "Theres some problem";
+					
+				}
+
+	}
+	
+
 
 }
 
@@ -679,7 +701,7 @@ function product_request($method,$mysqli,$data)
 	
 	if ($method=="getAll")
 	{
-		$query="select * from po_request";
+		$query="select * from product_request";
 		$result = $mysqli->query($query) or die($mysqli->error.__LINE__);
 		$json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
 		echo json_encode($json );
