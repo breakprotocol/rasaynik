@@ -1,5 +1,5 @@
 if (isproduction) {
-    adminurl = "http://localhost/rasaynik/backend/request.php";    
+    adminurl = "http://localhost/rasaynik/production/backend/request.php";    
 } else {
     adminurl = "http://localhost/rasaynik/backend/request.php";   
 }
@@ -11,7 +11,7 @@ var uploadurl = imgurl;
 
 
 
-myApp.factory('NavigationService', function ($http) {
+myApp.factory('NavigationService', function ($http,toastr,$state) {
     var navigation = [{
             name: "Purchase Order(PO)",
             classis: "activeColor",
@@ -36,11 +36,6 @@ myApp.factory('NavigationService', function ($http) {
             name: "Store Room Exit",
             classis: "activeColor",
             sref: "#/storeroomexit",
-            icon: "phone"
-        },{
-            name: "Products",
-            classis: "activeColor",
-            sref: "#/products",
             icon: "phone"
         },{
             name: "Manage Users",
@@ -129,6 +124,21 @@ myApp.factory('NavigationService', function ($http) {
                 data: data
             }).then(function (data) {
                 callback(data.data);
+            });
+        },
+
+        getPONumber:function(callback){
+            $http({
+                method: "POST",
+                url: adminurl + "/purchase_request/getPONumber"
+            }).then(function (data) {
+                if(data.data){
+                    console.log("data",data.data);
+                    callback(data.data);
+                }else{  
+                    toastr.error("Error While Generating PO No.","Error Messege");
+                    $state.go('purchase-order');
+                }
             });
         },
 

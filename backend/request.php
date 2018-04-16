@@ -49,7 +49,7 @@ switch($service)
 
 
 	default :
-	echo "Don do this";
+	echo "Dont do this";
 	break;
 }
 
@@ -60,7 +60,7 @@ function login($method,$mysqli,$data)
 	// print_r $data;
 	if($method=="login")
 	{
-		echo json_encode($data);
+		// echo json_encode($data);
 		$username = $data['username'];
 		// echo $username;
 		$password = $data['password'];
@@ -695,10 +695,8 @@ function INSERT_STORE_ROOM_ENTRY($type,$raw_material_id,$purchase_order_id,$mysq
 
 
 function product_request($method,$mysqli,$data)
-{	
-	echo $data;
+{
 	$data = json_decode($data, true);
-	
 	if ($method=="getAll")
 	{
 		$query="select * from product_request";
@@ -741,7 +739,6 @@ function product_request($method,$mysqli,$data)
 		$stmt->bind_param('ssssss', $product_name,$request_date,$request_status,$product_quantity,$location,$client_order);
 		$result = $stmt->execute();
 		$product_request_id= $mysqli->insert_id;
-		echo json_encode($result);
 		if($result)
 		{
 			foreach ($raw_materials as $key => $value) {
@@ -753,7 +750,6 @@ function product_request($method,$mysqli,$data)
 			$stmt->bind_param('sssss', $product_request_id,$raw_material_id,$value['raw_material']['raw_material_name'],$value['raw_material_qty'],$value['raw_material_unit']);
 			
 			$result = $stmt->execute();
-			echo $stmt->error;
 			echo json_encode($result);				
 			}
 		}
@@ -893,10 +889,7 @@ function store_room_exit($method,$mysqli,$data)
 				$result = $stmt->get_result();
 				$store_room_exit_data = mysqli_fetch_all($result, MYSQLI_ASSOC);
 				echo json_encode($store_room_exit_data);
-				
-				
 				foreach ($store_room_exit_data as $key => $value) {
-				
 				$current_timestamp = date("Y-m-d H:i:s"); 
 				$stmt = $mysqli->prepare('SELECT id,quantity from store_room where source_id =?');
 			 	$stmt->bind_param('s',$value['raw_material_id']);
@@ -905,12 +898,9 @@ function store_room_exit($method,$mysqli,$data)
 				$store_room_data = mysqli_fetch_all ($result, MYSQLI_ASSOC);
 				json_encode($store_room_data);
 				$store_room_data_id = $store_room_data[0]['id'];
-				echo "heyyy";
 				echo $value['raw_material_qty'];
-				echo "hey";
 				echo $store_room_data[0]['quantity'];
 				$quantity_tobe_updated =  $store_room_data[0]['quantity'] - $value['raw_material_qty'];
-				echo "jjl";
 				echo $quantity_tobe_updated;
 					$stmt = $mysqli->prepare('UPDATE store_room SET quantity = ?,last_modified = ? WHERE id = ?');
 					$stmt->bind_param('sss', $quantity_tobe_updated,$current_timestamp,$store_room_data_id);

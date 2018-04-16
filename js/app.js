@@ -29,18 +29,31 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
             controller: 'DashboardCtrl',
         })
 
-        //category
-        .state('category', {
-            url: "/category/:id",
-            templateUrl: "views/template.html",
-            controller: 'CategoryCtrl'
-        })
-
          //purchaase order
         .state('purchase-order', {
             url: "/purchaseorder",
             templateUrl: "views/template.html",
             controller: 'PurchaseOrderCtrl'
+        })
+
+         //purchaase order--Create
+        .state('po-create', {
+            url: "/purchaseorder/create",
+            templateUrl: "views/template.html",
+            controller: 'CategoryCtrl'
+        })
+
+         //purchaase order--Edit
+        .state('po-edit', {
+            url: "/purchaseorder/edit/:id",
+            templateUrl: "views/template.html",
+            controller: 'CategoryCtrl'
+        })
+
+        .state('products', {
+            url: "/products",
+            templateUrl: "views/template.html",
+            controller: 'ProductsCtrl'
         })
 
         .state('store-room-entry', {
@@ -56,7 +69,7 @@ myApp.config(function ($stateProvider, $urlRouterProvider, $httpProvider, $locat
         })
 
         .state('request-raw-material', {
-            url: "/requestrawmaterial",
+            url: "/requestrawmaterial/:id",
             templateUrl: "views/template.html",
             controller: 'RequestRawMaterialCtrl'
         })   

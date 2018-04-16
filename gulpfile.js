@@ -63,6 +63,12 @@ var jsArray = [
     './w/js/templates.js',
 ];
 
+var phpArray= [
+    './backend/connect.php',
+    './backend/login.php',
+    './backend/request.php'    
+]
+
 var replacehostFrom = "http://localhost/demo/";
 var replacehostTo = "http://wohlig.co.in/demo2/";
 
@@ -271,6 +277,12 @@ gulp.task('copy:img', function () {
         .pipe(gulpCopy("./production/"));
 });
 
+gulp.task('copy:php', function () {
+    var gulpCopy = require('gulp-copy');
+    return gulp.src("./backend/**")
+        .pipe(gulpCopy("./production/"));
+});
+
 gulp.task('copy:uploadImgs', function () {
     var gulpCopy = require('gulp-copy');
     return gulp.src("./uploads/**")
@@ -375,4 +387,4 @@ gulp.task('copy', ["copy:img", "copy:fonts"]);
 gulp.task('clearimage', ["clean:pImages", "clean:pFont"]);
 gulp.task('production', gulpSequence(["copy:img", "copy:uploadImgs", "copy:fonts", "sass:production", "minify:indexproduction", "minify:views"], 'clean:tmp', "concat:js", 'clean:tmp', "templatecache", "uglify:js", "minify:css", 'clean:tmp', "inlinesource", 'clean:tmp', "gzipfile", 'clean:tmp', 'clean:tmp', "zip"));
 gulp.task('productionc', gulpSequence(["copy:img", "copy:uploadImgs", "copy:fonts", "sass:production", "minify:indexproduction", "minify:views"], 'clean:tmp', "concat:js", 'clean:tmp', "templatecache", "uglify:js", "minify:css", 'clean:tmp', "inlinesource", 'clean:tmp', 'clean:production', "gzipfile", 'clean:tmp', 'clean:tmp', "zip", 'deploy'));
-gulp.task('production2', gulpSequence(["copy:img", "copy:uploadImgs", "copy:fonts", "sass:production", "minify:indexproduction", "minify:views"], 'clean:tmp', "concat:js", 'clean:tmp', "templatecache", "uglify:js", "minify:css", 'clean:tmp', "inlinesource", 'clean:tmp', "copy:indexhtml", 'clean:tmp', 'clean:tmp', "zip", 'renamePHP'));
+gulp.task('production2', gulpSequence(["copy:img","copy:php", "copy:uploadImgs", "copy:fonts", "sass:production", "minify:indexproduction", "minify:views"], 'clean:tmp', "concat:js", 'clean:tmp', "templatecache", "uglify:js", "minify:css", 'clean:tmp', "inlinesource", 'clean:tmp', "copy:indexhtml", 'clean:tmp', 'clean:tmp', "zip", 'renamePHP'));

@@ -60,6 +60,9 @@
                                     <th>
                                         Status
                                     </th>
+                                    <th>
+                                        View
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -87,6 +90,9 @@
                                     <td>
                                         {{item.request_status}}
                                     </td>
+                                    <td>
+                                        <span class="fa fa-eye fa-2x pointer" ui-sref="request-raw-material({'id':item.request_id})"></span>
+                                      </td>
                                 </tr>
                             </tbody>
                         </table>

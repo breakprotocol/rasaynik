@@ -174,10 +174,10 @@ myApp.filter('toInt', function () {
 
 myApp.filter('totalAmt', function () {
     return function (formData) {
-        console.log("formData",formData);
+        // console.log("formData",formData);
         if (formData) {
             var sum = _.sumBy(formData.raw_materials,'raw_material_amt');
-            console.log("sum",sum);
+            // console.log("sum",sum);
             return sum;
         }
     }

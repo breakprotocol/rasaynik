@@ -1,9 +1,9 @@
 <div class="heading-sec">
   <div class="row">
     <div class="col-md-4 column">
-      <div class="heading-profile">
+      <!-- <div class="heading-profile">
         <h2>Category</h2>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>
@@ -12,199 +12,203 @@
 <div class=" panel-content ">
   <div class="row ">
     <div class="col-md-12 ">
-      <div class="widget ">
-        <div class="table-area ">
-          <div class="widget-title ">
-            <div class="pull-right">
-              <!-- <form class="search-form mr-form ">
-                  <input type="text " ng-change="searchInTable(search) " placeholder="Search Here...
-                                     " ng-model="search" />
-                </form> -->
-            </div>
-            <h3>Purchase Order
-              <span class="tableTotal">(Total : {{totalItems}}) </span>
-            </h3>
-            <label>To:</label>
-            <div class="po-form-outer">
-              <input type="text" class="po-form-to" ng-model="formData.purchase_order_to" ng-readonly="readonly">
-            </div>
-
-            <div class="pull-right">
-              <div>
-                <label>P.O. No. :</label>
-                <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.purchase_order_id" ng-if="!readonly">
-                  <span ng-if="readonly">{{formData.purchase_order_id}}</span>
-                </div>
+      <div class="widget">
+        <form name="po_form" ng-submit="saveData(formData)">
+          <div class="table-area ">
+            <div class="widget-title ">
+              <div class="pull-right">
               </div>
-              <div>
-                <label>Date :</label>
-                <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.date" ng-if="!readonly">
-                 <span ng-if="readonly">{{formData.date |formatDate:'date'}}</span>
-                </div>
+              <h3>Purchase Order
+                <span class="tableTotal">(Total : {{totalItems}}) </span>
+              </h3>
+              <label>To:</label>
+              <div class="po-form-outer">
+                <input name="to" type="text" class="po-form-to" ng-model="formData.purchase_order_to" ng-readonly="readonly" required>
               </div>
-              <div>
-                <label>Qtn. Date :</label>
-                <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.qtn_Dt" ng-if="!readonly">
-                  <span ng-if="readonly">{{formData.qtn_Dt |formatDate:'date'}}</span>
-                </div>
-              </div>
-              <div>
-                <label>Req. Date :</label>
-                <div class="po-form-outer">
-                  <input type="date" class="po-form-to" ng-model="formData.req_Dt" ng-if="!readonly">
-                  <span ng-if="readonly">{{formData.req_Dt |formatDate:'date'}}</span>
-                </div>
-              </div>
-              <div>
-                <label>For Unit :</label>
-                <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.unit" ng-if="!readonly">
-                  <span ng-if="readonly">{{formData.unit}}</span>
-                </div>
-              </div>
-              <div>
-                <label>Payment :</label>
-                <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.payment" ng-if="!readonly">
-                  <span ng-if="readonly">{{formData.payment}}</span>
-                </div>
-              </div>
-              <div>
-                <label>Transport :</label>
-                <div class="po-form-outer">
-                  <input type="text" class="po-form-to" ng-model="formData.transport" ng-if="!readonly">
-                  <span ng-if="readonly">{{formData.transport}}</span>
-                </div>
-              </div>
-              <div>
-                  <label>Delivery Schedule :</label>
+  
+              <div class="pull-right">
+                <div>
+                  <label>P.O. No. :</label>
                   <div class="po-form-outer">
-                    <input type="text" class="po-form-to" ng-model="formData.delivery_schedule" ng-if="!readonly">
-                    <span ng-if="readonly">{{formData.delivery_schedule}}</span>
+                    <input name="po_no" type="text" class="po-form-to" ng-model="formData.purchase_order_id" readonly required>
                   </div>
                 </div>
-
-            </div>
-
-          </div>
-          <div class="table-responsive">
-            <!--<div class="table-responsive " ng-show="totalItems>0 ">-->
-            <table class="table  table-border">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>
-                    Name
-                  </th>
-                  <th>
-                    Description
-                  </th>
-                  <th>
-                    Quality
-                  </th>
-                  <th>
-                    Quantity
-                  </th>
-                  <th>
-                    Unit
-                  </th>
-                  <th>
-                    Rate
-                  </th>
-                  <th>
-                    Amount
-                  </th>
-                  <th ng-if="profile.credentials==2 || profile.credentials==0">Actions</th>
-                  <th ng-if="!view">Status</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!--<tr ng-repeat="item in items">-->
-                <tr ng-repeat="item in formData.raw_materials track by $index">
-                  <!--<tr>-->
-                  <!-- for pagination -->
-                  <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
-                  <td>{{$index + 1}}</td>
-
-                  <td ng-if="!readonly">
-                    <ui-select ng-model="item.raw_material" theme="bootstrap" style="width: 150px;" title="Choose a person">
-                      <ui-select-match placeholder="Name">{{$select.selected.name}}</ui-select-match>
-                      <ui-select-choices repeat="{'raw_material_id':prod.id,'raw_material_name':prod.name} as prod in item.products" refresh="setNewRaw(item.products,$select.search)" on-select="setNewRaw(products,$select.search)" refresh-delay="5">
-                        <div ng-bind-html="(prod.name | highlight: $select.search) +' (new)'"></div>
-                      </ui-select-choices>
-                    </ui-select>
-                  </td>
-                  <td ng-if="readonly">
-                    <span>{{item.raw_material_name}}</span>
-                  </td>
-                  <td>
-                    <input type="text" style="width: 150px;" ng-model="item.raw_material_desc" ng-if="!readonly">
-                    <span ng-if="readonly">{{item.raw_material_desc}}</span>
-                  </td>
-                  <td>
-                      <input type="text" style="width: 50px;" ng-model="item.raw_material_quality" ng-if="!readonly">
-                      <span ng-if="readonly">{{item.raw_material_quality}}</span>
-                    </td>
-                  <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_qty" ng-if="!readonly">
-                    <span ng-if="readonly">{{item.raw_material_qty}}</span>
-                  </td>
-                  <td>
-                    <input type="text" style="width: 50px;" ng-model="item.raw_material_unit" ng-if="!readonly">
-                    <span ng-if="readonly">{{item.raw_material_unit}}</span>
-                  </td>
-                  <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_rate" ng-if="!readonly">
-                    <span ng-if="readonly">{{item.raw_material_rate}}</span>
-                  </td>
-                  <td>
-                    <input type="number" style="width: 50px;" ng-model="item.raw_material_amt" ng-if="!readonly">
-                    <span ng-show="readonly">{{item.raw_material_amt = item.raw_material_rate * item.raw_material_qty}}</span>
-                  </td>
-                  <td ng-if="view">
-                    <a class="btn btn-danger" ng-click="removeRow($index)">
-                      <i class="fa fa-trash"></i> Remove
-                    </a>
-                  </td>
-                  <td ng-if="profile.credentials==2 || profile.credentials==0">
-                    <a class="btn" ng-class="{'btn-success':item.status=='approve'}" ng-click="item.status='approve'" >
-                      <i class="fa fa-thumbs-up fa-2x"></i> 
-                    </a>
-                    <a class="btn" ng-class="{'btn-danger':item.status=='reject'}" ng-click="item.status='reject'">
-                      <i class="fa fa-thumbs-down fa-2x"></i> 
-                    </a>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div class="final-amt">
-                <label>Total:</label>
-                <div class="po-form-outer pull-right">
-                  <span>{{formData | totalAmt}}</span>
+                <div>
+                  <label>Date :</label>
+                  <div class="po-form-outer">
+                    <input name="date" type="date" class="po-form-to" ng-model="formData.date" ng-if="!readonly" required>
+                   <span ng-if="readonly">{{formData.date |formatDate:'date'}}</span>
+                  </div>
                 </div>
+                <div>
+                  <label>Qtn. Date :</label>
+                  <div class="po-form-outer">
+                    <input name="qtn_date" type="date" class="po-form-to" ng-model="formData.qtn_Dt" ng-if="!readonly" required>
+                    <span ng-if="readonly">{{formData.qtn_Dt |formatDate:'date'}}</span>
+                  </div>
+                </div>
+                <div>
+                  <label>Req. Date :</label>
+                  <div class="po-form-outer">
+                    <input name="req_date" type="date" class="po-form-to" ng-model="formData.req_Dt" ng-if="!readonly" required>
+                    <span ng-if="readonly">{{formData.req_Dt |formatDate:'date'}}</span>
+                  </div>
+                </div>
+                <div>
+                  <label>For Unit :</label>
+                  <div class="po-form-outer">
+                    <input name="unit" type="text" class="po-form-to" ng-model="formData.unit" ng-if="!readonly" required>
+                    <span ng-if="readonly">{{formData.unit}}</span>
+                  </div>
+                </div>
+                <div>
+                  <label>Payment :</label>
+                  <div class="po-form-outer">
+                    <input name="payment" type="text" class="po-form-to" ng-model="formData.payment" ng-if="!readonly" required>
+                    <span ng-if="readonly">{{formData.payment}}</span>
+                  </div>
+                </div>
+                <div>
+                  <label>Transport :</label>
+                  <div class="po-form-outer">
+                    <input name="transport" type="text" class="po-form-to" ng-model="formData.transport" ng-if="!readonly" required>
+                    <span ng-if="readonly">{{formData.transport}}</span>
+                  </div>
+                </div>
+                <div>
+                    <label>Delivery Schedule :</label>
+                    <div class="po-form-outer">
+                      <input name="del_schedule" type="text" class="po-form-to" ng-model="formData.delivery_schedule" ng-if="!readonly" required>
+                      <span ng-if="readonly">{{formData.delivery_schedule}}</span>
+                    </div>
+                  </div>
+  
               </div>
+  
+            </div>
+            <div class="table-responsive">
+              <!--<div class="table-responsive " ng-show="totalItems>0 ">-->
+              <table class="table  table-border">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>
+                      Name
+                    </th>
+                    <th>
+                      Description
+                    </th>
+                    <th>
+                      Quality
+                    </th>
+                    <th>
+                      Quantity
+                    </th>
+                    <th>
+                      Unit
+                    </th>
+                    <th>
+                      Rate
+                    </th>
+                    <th>
+                      Amount
+                    </th>
+                    <th ng-if="create ||(cred==2 || cred==0)">Actions</th>
+                    <th ng-if="!view">Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!--<tr ng-repeat="item in items">-->
+                  <tr ng-repeat="item in formData.raw_materials track by $index">
+                    <!--<tr>-->
+                    <!-- for pagination -->
+                    <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
+                    <td>{{$index + 1}}</td>
+  
+                    <td ng-if="!readonly">
+                      <ui-select ng-model="item.raw_material" theme="bootstrap" style="width: 150px;" title="Choose a person">
+                        <ui-select-match placeholder="Name">{{$select.selected.name}}</ui-select-match>
+                        <ui-select-choices repeat="{'raw_material_id':prod.id,'raw_material_name':prod.name} as prod in item.products" refresh="setNewRaw(item.products,$select.search)" on-select="setNewRaw(products,$select.search)" refresh-delay="5">
+                          <div ng-bind-html="(prod.name | highlight: $select.search) +' (new)'"></div>
+                        </ui-select-choices>
+                      </ui-select>
+                    </td>
+                    <td ng-if="readonly">
+                      <span>{{item.raw_material_name}}</span>
+                    </td>
+                    <td>
+                      <input name="raw_desc_$index" type="text" style="width: 150px;" ng-model="item.raw_material_desc" ng-if="!readonly" required>
+                      <span ng-if="readonly">{{item.raw_material_desc}}</span>
+                    </td>
+                    <td>
+                        <input name="raw_qlty_$index" type="text" style="width: 50px;" ng-model="item.raw_material_quality" ng-if="!readonly">
+                        <span ng-if="readonly">{{item.raw_material_quality}}</span>
+                      </td>
+                    <td>
+                      <input name="raw_qnty_$index" type="number" style="width: 50px;" ng-model="item.raw_material_qty" ng-if="!readonly" required>
+                      <span ng-if="readonly">{{item.raw_material_qty}}</span>
+                    </td>
+                    <td>
+                      <input name="raw_unit_$index" type="text" style="width: 50px;" ng-model="item.raw_material_unit" ng-if="!readonly" required>
+                      <span ng-if="readonly">{{item.raw_material_unit}}</span>
+                    </td>
+                    <td>
+                      <input name="raw_rate_$index" type="number" style="width: 50px;" ng-model="item.raw_material_rate" ng-if="!readonly" required>
+                      <span ng-if="readonly">{{item.raw_material_rate}}</span>
+                    </td>
+                    <td>
+                      <input name="raw_amt_$index" type="number" style="width: 50px;" ng-model="item.raw_material_amt" ng-if="!readonly" required>
+                      <span ng-show="readonly">{{item.raw_material_amt = item.raw_material_rate * item.raw_material_qty}}</span>
+                    </td>
+                    <td ng-if="create">
+                      <a class="btn btn-danger" ng-click="removeRow($index)">
+                        <i class="fa fa-trash"></i> Remove
+                      </a>
+                    </td>
+                    <td ng-if="(!create && (profile.credentials==2 || profile.credentials==0))">
+                      <a class="btn" ng-class="{'btn-success':(item.status=='approve' || item.status=='Complete')}" ng-click="item.status='approve'" >
+                        <i class="fa fa-thumbs-up fa-2x"></i> 
+                      </a>
+                      <a class="btn" ng-class="{'btn-danger':(item.status=='reject' || item.status=='Rejected')}" ng-click="item.status='reject'">
+                        <i class="fa fa-thumbs-down fa-2x"></i> 
+                      </a>
+                    </td>
+                    <td>
+                      {{item.status}}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+  
+              <div class="final-amt">
+                  <label>Total:</label>
+                  <div class="po-form-outer pull-right">
+                    <span>{{formData | totalAmt}}</span>
+                  </div>
+                </div>
+            </div>
+           
+            <div class="tableData ">
+              <input type="button" class="btn btn-success pull-right" ng-click="addRow()" value="Add" ng-if="view">
+              </input>
+            </div>
+            <div>
+  
+            </div>
+  
+            <div class="text-center mt20 odd-even-button">
+  
+                <!-- for Purchase Order Create(PO guy-cred-1) -->
+              <button class="btn btn-default" type="submit" ng-if="((profile.credentials==1 || profile.credentials==0)  && create)">Save</button>
+  
+              <!-- for purchase order Accept(QA guy-cred-2) -->
+              <button class="btn btn-default" type="submit" ng-if="((profile.credentials==2 || profile.credentials==0)&&!create)">Submit</button>
+              
+              <button class="btn btn-default" ui-sref="purchase-order">Cancel</button>
+            </div>
           </div>
-         
-          <div class="tableData ">
-            <input type="button" class="btn btn-success pull-right" ng-click="addRow()" value="Add" ng-if="view">
-            </input>
-          </div>
-          <div>
-
-          </div>
-
-          <div class="text-center mt20 odd-even-button">
-            <button class="btn btn-default" type="submit" ng-click="saveData(formData)" ng-if="view">Save</button>
-            <button class="btn btn-default" type="submit" ng-click="submitApproveReject(formData)">Submit</button>
-            
-            <button class="btn btn-default" ui-sref="purchase-order">Cancel</button>
-          </div>
-        </div>
-        <pre>{{formData | json}}</pre>
+        </form>
+        <!-- <pre>{{formData | json}}</pre> -->
       </div>
     </div>
   </div>

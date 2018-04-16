@@ -113,13 +113,27 @@ Access Level
 0 - All Access
 1 - Purchase Order Create(PO guy)
 2 - Purchase Order Accept(QA guy)
-3 - Store room entry (Store room guy)
+3 - Store room Entry/Exit (Store room guy)
 4 - Request Raw materials(product create guy)
 Rest all pages should be viewable by everyone.
 
 
+Access Level 1
+Purchase Order Create
 
 
 TaskList
 Store Room Exit,Req raw materials- pagination
 Manage Users - Get All
+
+
+api changes
+
+->partial rejected
+        url-backend/request.php/purchase_request/approve
+    -It has to be  like Partial Approve where m getting responce
+
+->I should get PO-status complete or rejected if it has a single raw-materials in it
+
+->Api, get One,for  requested Raw  Material
+//

@@ -1,100 +1,84 @@
 <div class="heading-sec">
-    <div class="row">
-      <div class="col-md-4 column">
-        <div class="heading-profile">
-          <h2>Purchase Order</h2>
-        </div>
+  <div class="row">
+    <div class="col-md-4 column">
+      <div class="heading-profile">
+        <h2>Purchase Order</h2>
       </div>
     </div>
   </div>
-  
-  <!-- TABLE  -->
-  <div class=" panel-content ">
-    <div class="row ">
-      <div class="col-md-12 ">
-        <div class="widget ">
-          <div class="table-area ">
-            <div class="widget-title ">
-              <div class="pull-right">
-                <!-- <form class="search-form mr-form ">
-                    <input type="text " ng-change="searchInTable(search) " placeholder="Search Here...
-                                       " ng-model="search" />
-                  </form> -->
-                <a class="btn btn-success" ng-if="profile.credentials==1 || profile.credentials==0" ui-sref="category">
-                    Create
-                </a>
-              </div>
-              <h3>List of Purchase Orders
-                <span class="tableTotal">(Total : {{totalItems}}) </span>
-              </h3>
-            </div>
-            <div class="table-responsive ">
-              <!--<div class="table-responsive " ng-show="totalItems>0 ">-->
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th>#</th>
-                    <th>
-                      Id
-                    </th>
-                    <th>
-                    
-                      </th>
-                    <th ng-if="profile.credentials==0">Status</th>
-                    <th ng-if="profile.credentials==2 || profile.credentials==0">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <!--<tr ng-repeat="item in items">-->
-                  <tr ng-repeat="item in items track by $index">
-                    <!--<tr>-->
-                    <!-- for pagination -->
-                    <!-- <td>{{($index + 1)+((formData.page-1)*maxRow)}}</td> -->
-                    <td>{{((formData.page-1) * 10) + $index + 1}} </td>
-  
-                    <td>
-                      <!-- <ui-select multiple tagging="tagTransform" ng-model="item.name" theme="bootstrap"  style="width: 300px;" title="Choose a person">
-                        <ui-select-match placeholder="Name">{{$item.name}}</ui-select-match>
-                        <ui-select-choices repeat="prod in products">
-                          <div  ng-bind-html="(prod.name | highlight: $select.search) +' (new)'"></div>
-                        </ui-select-choices>
-                      </ui-select> -->
-                      <span>{{item.purchase_order_id}}</span>
-                    </td>
-                    <th>
-                        <span class="fa fa-eye fa-2x pull-right pointer" ui-sref="category({'id':item.purchase_order_id})"></span>
-                      </th>
-                    <td ng-if="profile.credentials==0">
-                          <i class="fa fa-thumbs-up success fa-2x" ng-if="item.status=='Complete'"></i>
-                          <i class="fa fa-thumbs-down danger fa-2x" ng-if="item.status=='Rejected'"></i> 
+</div>
 
-                          <i class="fa fa-clock-o fa-2x" ng-if="item.status=='Partial'"></i> 
-                          <i class="fa fa-clock-o fa-2x" ng-if="!item.status"></i>
-                      </td>
-                    <td ng-if="profile.credentials==2 || profile.credentials==0">
-                      <a class="btn" ng-class="{'btn-success':item.status=='Complete'}" ng-click="approveDecline(1,item)" >
-                        <i class="fa fa-thumbs-up fa-2x"></i> 
-                      </a>
-                      <a class="btn" ng-class="{'btn-danger':item.status=='Rejected'}" ng-click="approveDecline(0,item)">
-                        <i class="fa fa-thumbs-down fa-2x"></i> 
-                      </a>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div> 
-            <div class="tableData " ng-show="totalItems===0 ">
-                <h5>No data found</h5>
-              </div>
-              <div class="tableData " ng-show="totalItems===undefined ">
-                <h5>Loading Data</h5>
-              </div>
-              <ul uib-pagination ng-if="totalItems" ng-change="viewTable()"  total-items="totalItems" items-per-page="10" ng-model="formData.page"  class="pagination-sm"
-                max-size="10" boundary-links="true" force-ellipses="true">{{page.number}}</ul>
+<!-- TABLE  -->
+<div class=" panel-content ">
+  <div class="row ">
+    <div class="col-md-12 ">
+      <div class="widget ">
+        <div class="table-area ">
+          <div class="widget-title ">
+            <div class="pull-right">
+              <a class="btn btn-success" ng-if="profile.credentials==1 || profile.credentials==0" ui-sref="po-create">
+                Create
+              </a>
             </div>
+            <h3>List of Purchase Orders
+              <span class="tableTotal">(Total : {{totalItems}}) </span>
+            </h3>
           </div>
+          <div class="table-responsive ">
+            <table class="table">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>
+                    Id
+                  </th>
+                  <th>
+                    View
+                  </th>
+                  <th>Status</th>
+                  <th ng-if="profile.credentials==2 || profile.credentials==0">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr ng-repeat="item in items track by $index">
+                  <td>{{((formData.page-1) * 10) + $index + 1}} </td>
+
+                  <td>
+                    <span>{{item.purchase_order_id}}</span>
+                  </td>
+                  <td>
+                    <span class="fa fa-eye fa-2x pointer" ui-sref="po-edit({'id':item.purchase_order_id})"></span>
+                  </td>
+                  <td ng-if="profile.credentials!=3 || profile.credentials!=4">
+                    <span ng-if="item.status!='' && item.status!=null">{{item.status}}</span>
+                    <span ng-if="item.status=='' || item.status==null">Pending</span>
+                  </td>
+
+                  <td ng-if="profile.credentials==2 || profile.credentials==0">
+                    <a class="btn" ng-class="{'btn-success':item.status=='Complete'}" ng-click="approveDecline(1,item)">
+                      <i class="fa fa-thumbs-up fa-2x"></i>
+                    </a>
+                    <a class="btn" ng-class="{'btn-danger':item.status=='Rejected'}" ng-click="approveDecline(0,item)">
+                      <i class="fa fa-thumbs-down fa-2x"></i>
+                    </a>
+                  </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="tableData " ng-show="totalItems===0 ">
+            <h5>No data found</h5>
+          </div>
+          <div class="tableData " ng-show="totalItems===undefined ">
+            <h5>Loading Data</h5>
+          </div>
+          <ul uib-pagination ng-if="totalItems" ng-change="viewTable()" total-items="totalItems" items-per-page="10" ng-model="formData.page"
+            class="pagination-sm" max-size="10" boundary-links="true" force-ellipses="true">{{page.number}}</ul>
         </div>
       </div>
     </div>
   </div>
-  <!-- TABLE  END -->
+</div>
+</div>
+<!-- TABLE  END -->
